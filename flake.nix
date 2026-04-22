@@ -35,10 +35,12 @@
         default =
           let
             db = import ./nix/database.nix { inherit pkgs; };
+            ff = import ./nix/firefly.nix { inherit pkgs; };
           in
           pkgs.mkShell {
             buildInputs = with db; [
-              bun
+              pkgs.firefly-iii
+              pkgs.bun
               pkgs.postgresql
               pgconfigure
               pgstart
@@ -48,6 +50,7 @@
               pgdump
             ];
 
+            DATABASE_URI = "pg://firefly-iii:firefly-iii@localhost:5432/firefly-iii";
             LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
             ENVIRONMENT = "development";
 
