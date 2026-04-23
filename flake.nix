@@ -32,38 +32,21 @@
       });
 
       devShells = forAllSystems (pkgs: {
-        default =
-          let
-            db = import ./nix/database.nix { inherit pkgs; };
-            ff = import ./nix/firefly.nix { inherit pkgs; };
-          in
-          pkgs.mkShell {
-            buildInputs = with db; [
-              pkgs.firefly-iii
-              pkgs.bun
-              pkgs.postgresql
-              pgconfigure
-              pgstart
-              pginit
-              pgstop
-              pgseed
-              pgdump
-            ];
+        default = pkgs.mkShell {
+          buildInputs = [
+            pkgs.bun
 
-            DATABASE_URI = "pg://firefly-iii:firefly-iii@localhost:5432/firefly-iii";
-            LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
-            ENVIRONMENT = "development";
+          ];
 
-            shellHook = ''
+          DATABASE_URI = "pg://firefly-iii:firefly-iii@localhost:5432/firefly-iii";
+          LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+          ENVIRONMENT = "development";
+          FIREFLY_API_URL = "https://money.vagahbond.com/api/v1";
 
-              echo "pginit init database"
-              echo "pgstart start database"
-              echo "pgconfigure create db and user"
-              echo "pgdump to dump db in database.sql"
-
-              echo Now developping my homepage!
-            '';
-          };
+          shellHook = ''
+            echo Now developping my firefly debt plugin!
+          '';
+        };
       });
     };
 }
