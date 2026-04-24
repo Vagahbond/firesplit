@@ -1,7 +1,6 @@
-import { createDebtAccount, getUserAccount, getUserAccounts, getUsers } from "./lib/api-operations";
-import { extractSharedTransactionEmails, getDebtAccountName, registerUser } from "./lib/domain";
+import { executeTransaction, prepareTransaction, registerUser } from "./lib/domain/domain.ts";
 import type { WebhookPayload } from "./lib/entities";
-import { getLocalUsers } from "./lib/storage";
+import { FiresplitError } from "./lib/errors.ts";
 
 
 const server = Bun.serve({
@@ -11,108 +10,43 @@ const server = Bun.serve({
         let errors: string[] = []
 
         try {
+
           const body = (await req.json()) as WebhookPayload;
 
-          for (let transaction of body.content.transactions) {
+          for (let t of body.content.transactions) {
 
-            const payeeEmails = extractSharedTransactionEmails(transaction);
+            const preparedTransaction = await prepareTransaction(t);
 
-            // the new transaction is not a shared transaction
-            if (payeeEmails.length === 0) {
+            if (preparedTransaction)
+              executeTransaction(preparedTransaction);
 
-              continue;
-
-            }
-
-            const localUsers = getLocalUsers();
-
-            if (!localUsers[0]) {
-              throw new Error("No users registered");
-            }
-
-            const fireflyUsers = await getUsers(localUsers[0].token);
-
-            const payer = fireflyUsers.find(u => u.id.toString() === transaction.user.toString());
-
-            if (!payer) {
-              throw new Error(`Payer with ID ${payer} been found in Firefly`);
-            }
-
-            const payerToken = localUsers.find(u => u.email === payer.attributes.email)?.token;
-
-
-            if (!payerToken) {
-              throw new Error(`Payer ${payer.attributes.email} has not registered their token`);
-            }
-
-            const payerAccounts = await getUserAccounts(payerToken)
-
-
-            for (let m of payeeEmails) {
-
-              const payerDebtAccount = payerAccounts.find(a => a.attributes.name === getDebtAccountName(m));
-
-              console.log(payerAccounts.map(a => a.attributes.name), m)
-
-
-              // If the payer has no debtAccount, create one 
-              if (!payerDebtAccount) {
-                try {
-                  await createDebtAccount(getDebtAccountName(m), payerToken);
-                } catch (error) {
-                  errors.push(`Error creating debt account "${getDebtAccountName(m)}" for payer ${payer.attributes.email}: ${error}`);
-                  break;
-                }
-              }
-
-              const payeeToken = localUsers.find(u => u.email === m)?.token
-
-              if (!payeeToken) {
-                errors.push(`Transaction could not be processed: payee ${m} has not registered their token`);
-                continue;
-              }
-
-              const payeeAccounts = await getUserAccounts(payeeToken);
-
-              const debtAccount = payeeAccounts.find(a => a.attributes.name === getDebtAccountName(payer.attributes.email));
-
-              // If the payee has no debtAccount, create one 
-              if (!debtAccount) {
-                try {
-                  const debtAccount = await createDebtAccount(getDebtAccountName(payer.attributes.email), payeeToken);
-                } catch (error) {
-                  errors.push(`Error creating debt account for ${m}: ${error}`);
-                  continue;
-                }
-              }
-
-
-              //all acounts are there, now the transaction
-            }
-            if (errors.length > 0)
-              continue
           }
 
-          if (errors.length > 0)
-            return new Response(JSON.stringify({ errors: errors }), {
-              status: 500,
-              headers: { "Content-Type": "application/json" },
-            });
+        } catch (e: unknown) {
+          const error = e as Error;
+          console.error(error)
 
-          return new Response("OK");
-        } catch (error) {
-          console.error(error);
-          return new Response(JSON.stringify({ error: (error as Error).message }), {
-            status: 500,
-            headers: { "Content-Type": "application/json" },
-          });
 
+          switch (error.constructor) {
+            case FiresplitError:
+              return new Response(error.message, { status: (error as FiresplitError).status, headers: { "Content-Type": "application/json" } });
+            default:
+              return new Response(JSON.stringify({ error: (error as Error).message }), {
+                status: 500,
+                headers: { "Content-Type": "application/json" },
+              });
+          }
         }
-      },
+
+        finally {
+          return new Response("OK");
+        }
+      }
     },
     "/user/register": {
       POST: async (req) => {
         try {
+
 
           const body = (await req.json()) as { token?: string; email?: string };
 

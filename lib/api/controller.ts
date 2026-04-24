@@ -1,4 +1,5 @@
 import type { User, Account, Transaction, UserAttributes } from "./entities";
+import { ApiError } from "./errors";
 
 const API_BASE = process.env.FIREFLY_API_URL || "http://localhost:8080/api/v1";
 
@@ -15,7 +16,7 @@ async function request<T>(endpoint: string, token: string, options?: RequestInit
 
   if (!res.ok) {
     const error = await res.text();
-    throw new Error(`Firefly API error: ${res.status} - ${error}`);
+    throw new ApiError(`Firefly API error: ${error}`, res.status);
   }
 
   return res.json() as Promise<T>;
@@ -43,7 +44,6 @@ export async function createDebtAccount(
   accountName: string,
   token: string
 ): Promise<Account> {
-  console.log(accountName)
   const payload = {
     name: accountName,
     type: "liabilities",
@@ -62,24 +62,64 @@ export async function createDebtAccount(
 }
 
 export async function createTransaction(
-  accountId: number,
+  description: string,
   amount: number,
-  payer: UserAttributes,
-  payee: UserAttributes
+  sourceName: string,
+  destinationName: string,
+  date: Date,
+
+  currency_id: string,
+  token: string
 ): Promise<Transaction> {
   const payload = {
+    error_if_duplicate_hash: false,
+    apply_rules: false,
+    fire_webhooks: false,
     transactions: [
       {
-        type: "withdrawal",
-        amount: amount.toString(),
-        source_id: accountId,
-        destination_name: payee.email,
-        date: new Date().toISOString().split("T")[0],
+        description,
+        type: "transfer",
+        amount,
+        source_name: sourceName,
+        destination_name: destinationName,
+        date: date.toISOString(),
+        currency_id: currency_id,
       },
     ],
   };
 
-  const response = await request<{ data: Transaction }>("/transactions", "", {
+  const response = await request<{ data: Transaction }>("/transactions", token, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  return response.data;
+}
+
+export async function updateTransaction(
+  description: string,
+  transactionId: string,
+  amount: number,
+  sourceName: string,
+  destinationName: string,
+  token: string
+): Promise<Transaction> {
+
+  const payload = {
+    error_if_duplicate_hash: false,
+    apply_rules: false,
+    fire_webhooks: false,
+    transactions: [
+      {
+        description,
+        type: "transfer",
+        amount,
+        source_name: sourceName,
+        destination_name: destinationName
+      },
+    ],
+  };
+
+  const response = await request<{ data: Transaction }>(`/transactions/${transactionId}`, token, {
     method: "POST",
     body: JSON.stringify(payload),
   });
