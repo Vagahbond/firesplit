@@ -1,7 +1,5 @@
-import { createDebtAccount, createTransaction, getAccountTransactions, getUserAccounts, getUsers, updateTransaction } from "../api/controller";
-import type { Account, WebhookTransaction } from "../api/entities";
-import type { User } from "../entities";
-import { FiresplitError } from "../errors";
+import { createDebtAccount, createTransaction, getAccountTransactions, getUserAccounts, getUsers, updateTransaction } from "../api/fetcher";
+import type { Account, User, WebhookTransaction } from "../api/entities";
 import { addOrUpdateLocalUser, getLocalUsers, type LocalDbUser } from "../repository";
 import type { PreparedTransaction, PreparedUser } from "./entities";
 import { FireflyUserNotFoundError, LocalUserNotFoundError, NoUsersRegisteredError, UserPreparationError } from "./errors";
@@ -64,7 +62,17 @@ function prepareUser(localUsers: LocalDbUser[], fireflyUsers: User[], user: { id
 
 }
 
-async function getOrCreateDebtAccountId(owner: PreparedUser, owed: PreparedUser): Promise<Account> {
+async function getOrCreatePeerAccount(owner: PreparedUser, owed: PreparedUser): Promise<Account> {
+  const userAccounts = await getUserAccounts(owner.token);
+  const peerAccountName = getPeerAccountName(owed.email);
+  let peerAccount = userAccounts.find(a => a.attributes.name === peerAccountName);
+  if (!peerAccount) {
+    peerAccount = await createPeerAccount(peerAccountName, owner.token);
+  }
+  return peerAccount;
+}
+
+async function getOrCreateDebtAccount(owner: PreparedUser, owed: PreparedUser): Promise<Account> {
 
   const userAccounts = await getUserAccounts(owner.token);
 
@@ -82,10 +90,7 @@ async function getOrCreateDebtAccountId(owner: PreparedUser, owed: PreparedUser)
 
 
 export async function prepareTransaction(transaction: WebhookTransaction): Promise<PreparedTransaction | undefined> {
-
-
   const localUsers = getLocalUsers();
-
 
   const payeeEmails = extractSharedTransactionEmails(transaction);
 
@@ -119,10 +124,12 @@ export async function prepareTransaction(transaction: WebhookTransaction): Promi
   }
 }
 
-export async function executeTransaction(transaction: PreparedTransaction): Promise<void> {
+export async function createPeerTransactions(transaction: PreparedTransaction): Promise<void> {
   for (let p of transaction.payee) {
 
-    const payeeAccount = await getOrCreateDebtAccountId(p, transaction.payer);
+    const payeeAccount = await getOrCreateDebtAccount(p, transaction.payer);
+
+    const payeePeerAcount = await getOrCreatePeerAccount(p, transaction.payer);
 
     const payeeAcountTransactions = await getAccountTransactions(payeeAccount.id, p.token);
 
@@ -141,7 +148,9 @@ export async function executeTransaction(transaction: PreparedTransaction): Prom
     await createTransaction(payeeTransactionName, amountPerPayee, transaction.payer.email, payeeAccount.attributes.name, transaction.date, transaction.currency_id, p.token);
 
 
-    const payerAccount = await getOrCreateDebtAccountId(transaction.payer, p);
+    const payerAccount = await getOrCreateDebtAccount(transaction.payer, p);
+
+    const payerPeerAcount = await getOrCreatePeerAccount(p, transaction.payer);
 
     const payerAcountTransactions = await getAccountTransactions(payerAccount.id, p.token);
 

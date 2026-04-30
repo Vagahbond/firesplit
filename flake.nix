@@ -35,7 +35,6 @@
         default = pkgs.mkShell {
           buildInputs = [
             pkgs.bun
-
           ];
 
           DATABASE_URI = "pg://firefly-iii:firefly-iii@localhost:5432/firefly-iii";

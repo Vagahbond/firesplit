@@ -1,0 +1,27 @@
+services:
+  app:
+    image: fireflyiii/core:latest
+    hostname: app
+    container_name: firefly_iii_core
+    restart: always
+    env_file: .dev.env
+    # platform: linux/amd64
+    user: "1000:1000"
+    ports:
+      - 8033:8080
+    depends_on:
+      - db
+  db:
+    image: mariadb:lts
+    hostname: db
+    container_name: firefly_iii_db
+    restart: always
+    env_file: .dev.env
+    user: "1000:1000"
+    volumes:
+      - ./firefly_iii_db:/var/lib/mysql
+
+volumes:
+   firefly_iii_upload:
+   firefly_iii_db:
+

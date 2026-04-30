@@ -40,7 +40,7 @@ export async function getAccountTransactions(
   return response.data;
 }
 
-export async function createDebtAccount(
+export async function createAccount(
   accountName: string,
   token: string
 ): Promise<Account> {
