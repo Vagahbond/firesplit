@@ -1,6 +1,10 @@
 # dependencies (bun install)
 node_modules
 
+data
+
+.env
+
 # output
 out
 dist
@@ -32,3 +36,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# project specific
+firefly.sql
+pglogfile

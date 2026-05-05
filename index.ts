@@ -1,83 +1,44 @@
-import type { WebhookPayload } from "./lib/api/entities.ts";
-import { createPeerTransactions, prepareTransaction, registerUser } from "./lib/domain/domain.ts";
-import { FiresplitError } from "./lib/errors.ts";
-
-export const routes = {
-  "/transaction_webhook": {
-    POST: async (req: Request) => {
-      try {
-
-        const body = (await req.json()) as WebhookPayload;
-
-        for (let t of body.content.transactions) {
-
-          const preparedTransaction = await prepareTransaction(t);
-
-          if (preparedTransaction)
-            createPeerTransactions(preparedTransaction);
-        }
-
-      } catch (e: unknown) {
-        const error = e as Error;
-        console.error(error)
+import { authenticateUser, AuthTokenName } from "./lib/authService";
+import { getDebtsForUser } from "./lib/repository/repository";
 
 
-        switch (error.constructor) {
-          case FiresplitError:
-            return new Response(error.message, { status: (error as FiresplitError).status, headers: { "Content-Type": "application/json" } });
+
+Bun.serve({
+  port: 3000,
+  routes: {
+    "/": async (req) => {
+      const token = req.cookies.get(AuthTokenName)
+
+      if (!token) {
+        return new Response("No token found", { status: 401 });
+      }
+
+      const user = await authenticateUser(token).catch(e => {
+        console.error(e);
+
+        switch (e.name) {
+          case "MalformedTokenError":
+            return new Response(`Malformed token: ${e.message}`, { status: 401 });
+          case "CryptographicError":
+            return new Response(`Cryptographic error ${e.message}`, { status: 401 });
           default:
-            return new Response(JSON.stringify({ error: (error as Error).message }), {
-              status: 500,
-              headers: { "Content-Type": "application/json" },
-            });
+            return new Response(`Unknown error ${e.message}`, { status: 500 });
         }
+      });
+
+
+      if (!user) {
+        return new Response("User not found", { status: 401 });
       }
 
-      finally {
-        return new Response("OK");
-      }
-    }
-  },
-  "/user/register": {
-    POST: async (req: Request) => {
-      try {
 
 
-        const body = (await req.json()) as { token?: string; email?: string };
 
-        if (!body.token || !body.email) {
-          return new Response(JSON.stringify({ error: "Missing token or email" }), {
-            status: 400,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
 
-        registerUser(body.token, body.email);
 
-        return new Response(JSON.stringify({ success: true }), {
-          headers: { "Content-Type": "application/json" },
-        });
-      } catch (error) {
-        console.error(error);
-        return new Response(JSON.stringify({ error: (error as Error).message }), {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        });
-      }
-    }
-  },
-};
 
-export function notFoundHandler(req: Request) {
-  return new Response("Not Found", { status: 404 });
-}
 
-const server = Bun.serve({
-  routes,
-
-  fetch(req) {
-    return notFoundHandler(req);
+      return new Response("Hello !");
+    },
   },
 });
-
-console.log(`Server running at ${server.url}`);

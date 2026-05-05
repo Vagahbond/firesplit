@@ -1,16 +1,15 @@
 {
-  "name": "firefly-debt-tracker",
+  "name": "firesplit",
   "module": "index.ts",
   "type": "module",
   "private": true,
-  "scripts": {
-    "test": "bun test",
-    "test:watch": "bun test --watch"
-  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1"
   }
 }

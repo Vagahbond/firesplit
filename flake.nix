@@ -33,14 +33,28 @@
 
       devShells = forAllSystems (pkgs: {
         default = pkgs.mkShell {
-          buildInputs = [
-            pkgs.bun
-          ];
+          buildInputs =
+            let
+              database = import ./nix/database.nix {
+                inherit pkgs;
+                project = "firefly-iii";
+              };
+            in
+            with database;
+            [
+              pkgs.postgresql
+              pgconfigure
+              pgstart
+              pginit
+              pgseed
+              pgstop
+              pgdump
+              pkgs.bun
+            ];
 
           DATABASE_URI = "pg://firefly-iii:firefly-iii@localhost:5432/firefly-iii";
           LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
           ENVIRONMENT = "development";
-          FIREFLY_API_URL = "https://money.vagahbond.com/api/v1";
 
           shellHook = ''
             echo Now developping my firefly debt plugin!
