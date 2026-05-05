@@ -1,5 +1,5 @@
 import { authenticateUser, AuthTokenName } from "./lib/authService";
-import { getDebtsForUser } from "./lib/repository/repository";
+import { getBalancesForUser, getDebtsForUser, getReimbursementsForUser } from "./lib/repository/repository";
 
 
 
@@ -27,9 +27,20 @@ Bun.serve({
       });
 
 
-      if (!user) {
+      if (!user || user instanceof Response) {
         return new Response("User not found", { status: 401 });
       }
+
+      const debts = await getDebtsForUser(user.email)
+
+      console.log(debts)
+
+
+      const balances = await getBalancesForUser(user.email)
+
+      console.log(balances)
+
+      //const balances = await getBalancesForUser(user.email)
 
 
 

@@ -1,7 +1,7 @@
 import { createDecipheriv, createHmac } from "node:crypto";
 import { MalformedTokenError } from "./errors";
 import type { User } from "./entities";
-import { getUserById } from "./repository/repository.ts";
+import { getUserById } from "./repository/repository";
 
 const key = (process.env.FIREFLY_KEY ?? "")
 
