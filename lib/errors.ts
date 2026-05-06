@@ -1,13 +1,20 @@
-export class MalformedTokenError extends Error {
-  constructor(message: string) {
+export class FireSplitError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
     super(message);
-    this.name = "MalformedTokenError";
+    this.name = "FireSplitError";
+    this.status = status;
   }
 }
 
-export class CryptographicError extends Error {
+export class MalformedTokenError extends FireSplitError {
   constructor(message: string) {
-    super(message);
-    this.name = "CryptographicError";
+    super(message, 401);
+  }
+}
+
+export class CryptographicError extends FireSplitError {
+  constructor(message: string) {
+    super(message, 401);
   }
 }

@@ -1,7 +1,7 @@
 import { authenticateUser, AuthTokenName } from "./lib/authService";
+import { FireSplitError } from "./lib/errors";
+import { renderBalancesPage, renderErrorPage } from "./lib/render";
 import { getBalancesForUser, getDebtsForUser, getReimbursementsForUser } from "./lib/repository/repository";
-
-
 
 Bun.serve({
   port: 3000,
@@ -13,43 +13,38 @@ Bun.serve({
         return new Response("No token found", { status: 401 });
       }
 
-      const user = await authenticateUser(token).catch(e => {
+      const user = await authenticateUser(token).catch(async e => {
         console.error(e);
 
         switch (e.name) {
-          case "MalformedTokenError":
-            return new Response(`Malformed token: ${e.message}`, { status: 401 });
-          case "CryptographicError":
-            return new Response(`Cryptographic error ${e.message}`, { status: 401 });
+          case "FiresplitError":
+            return new Response(await renderErrorPage(e), { status: e.status });
           default:
-            return new Response(`Unknown error ${e.message}`, { status: 500 });
+            return new Response(await renderErrorPage(e), { status: 500 });
         }
       });
-
 
       if (!user || user instanceof Response) {
         return new Response("User not found", { status: 401 });
       }
 
-      const debts = await getDebtsForUser(user.email)
-
-      console.log(debts)
-
-
       const balances = await getBalancesForUser(user.email)
 
-      console.log(balances)
-
-      //const balances = await getBalancesForUser(user.email)
 
 
+      return new Response(await renderBalancesPage(balances), { headers: { "Content-Type": "text/html" } });
+    },
 
+    "/style.css": () => {
+      return new Response(Bun.file(import.meta.dir + "/templates/style.css"), {
+        headers: { "Content-Type": "text/css" }
+      });
+    },
 
-
-
-
-
-      return new Response("Hello !");
+    "/robots.txt": () => {
+      return new Response(Bun.file(import.meta.dir + "/templates/robots.txt"), {
+        headers: { "Content-Type": "text/plain" }
+      });
     },
   },
 });

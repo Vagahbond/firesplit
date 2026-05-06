@@ -4,12 +4,14 @@
   "type": "module",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/pug": "^2.0.10"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
-    "crypto": "^1.0.1"
+    "crypto": "^1.0.1",
+    "pug": "^3.0.4"
   }
 }
