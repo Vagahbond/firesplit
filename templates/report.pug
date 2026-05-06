@@ -1,0 +1,52 @@
+div.report-header
+  h2 Report
+  p.subtitle Transactions for #{email}
+
+if debts && debts.length > 0
+  div.section
+    h3.section-title Dettes (Owed)
+    each debt in debts
+      div.transaction-card.debt
+        div.transaction-header
+          span.date= debt.date
+          span.amount.negative= Number(debt.amount).toFixed(2) + ' €'
+        div.transaction-details
+          p
+            strong Payer: 
+            span= debt.payer_email
+          p
+            strong Payee: 
+            span= debt.payee_email
+          p
+            strong Source Account: 
+            span= debt.source_account
+          p
+            strong Original Amount: 
+            span= Number(debt.original_amount).toFixed(2) + ' €'
+          if debt.tag
+            p
+              strong Tag: 
+              span= debt.tag
+
+if reimbursements && reimbursements.length > 0
+  div.section
+    h3.section-title Remboursements (Reimbursed)
+    each reimbursement in reimbursements
+      div.transaction-card.reimbursement
+        div.transaction-header
+          span.date= 'N/A'
+          span.amount.positive= '+' + Number(reimbursement.amount).toFixed(2) + ' €'
+        div.transaction-details
+          p
+            strong Payer: 
+            span= reimbursement.payer_email
+          p
+            strong Account: 
+            span= reimbursement.account_name
+          p
+            strong Original Amount: 
+            span= Number(reimbursement.original_amount).toFixed(2) + ' €'
+
+if (!debts || debts.length === 0) && (!reimbursements || reimbursements.length === 0)
+  div.empty-state
+    p No transactions found for this user.
