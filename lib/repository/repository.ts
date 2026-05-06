@@ -167,7 +167,7 @@ GROUP BY email
 `
 
 
-  return balances
+  return balances.map(b => ({ ...b, balance: Number(b.balance).toFixed(2) }))
 
 }
 

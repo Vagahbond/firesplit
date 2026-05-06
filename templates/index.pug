@@ -5,9 +5,14 @@ html(lang="fr")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     meta(name="robots" content="noindex, nofollow")
     title FireSplit - Gestion de dettes
+    link(rel="preconnect" href="https://fonts.googleapis.com")
+    link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
     link(rel="stylesheet" href="style.css")
   body
     div.container
-      h1 FireSplit - Gestion de dettes
+      div.header
+        h1 FireSplit
+        p.subtitle Gestion de dettes simplifiée
       div.content-section#content
         != content
+    script(src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.10/dist/htmx.min.js" integrity="sha384-H5SrcfygHmAuTDZphMHqBJLc3FhssKjG7w/CeCpFReSfwBWDTKpkzPP8c+cLsK+V" crossorigin="anonymous")

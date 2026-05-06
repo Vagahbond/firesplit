@@ -25,7 +25,36 @@ Bun.serve({
       });
 
       if (!user || user instanceof Response) {
-        return new Response("User not found", { status: 401 });
+        return new Response(await renderErrorPage(new FireSplitError("User not found", 401)), { status: 401 });
+      }
+
+      const balances = await getBalancesForUser(user.email)
+
+
+
+      return new Response(await renderBalancesPage(balances), { headers: { "Content-Type": "text/html" } });
+    },
+
+    "/report/:email": async (req) => {
+      const email = req.params.email
+
+      if (!email) {
+        return new Response("No email found", { status: 401 });
+      }
+
+      const user = await authenticateUser(email).catch(async e => {
+        console.error(e);
+
+        switch (e.name) {
+          case "FiresplitError":
+            return new Response(await renderErrorPage(e), { status: e.status });
+          default:
+            return new Response(await renderErrorPage(e), { status: 500 });
+        }
+      });
+
+      if (!user || user instanceof Response) {
+        return new Response(await renderErrorPage(new FireSplitError("User not found", 401)), { status: 401 });
       }
 
       const balances = await getBalancesForUser(user.email)
