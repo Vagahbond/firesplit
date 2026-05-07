@@ -43,9 +43,9 @@ Bun.serve({
         return mkWebResponse(errorPage, 401);
       }
 
-      const debts = await getDebtsForUser(user.email)
+      const debts = await getDebtsForUser(user.email, email)
 
-      const reimbursements = await getReimbursementsForUser(user.email)
+      const reimbursements = await getReimbursementsForUser(user.email, email)
 
       const currentBalances = await getBalancesForUser(user.email)
 

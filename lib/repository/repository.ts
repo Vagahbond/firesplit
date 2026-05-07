@@ -17,7 +17,7 @@ export async function getUserById(id: number): Promise<User | undefined> {
 }
 
 
-export async function getDebtsForUser(email: string): Promise<Debt[]> {
+export async function getDebtsForUser(email: string, peerEmail: string): Promise<Debt[]> {
   const debts: Debt[] = await db`
     SELECT  
       transactions.id as transaction_id,
@@ -54,6 +54,9 @@ export async function getDebtsForUser(email: string): Promise<Debt[]> {
       AND (
          users.email = ${email} OR SUBSTRING(tags.tag, 8) = ${email} 
        ) 
+      AND (
+        users.email = ${peerEmail} OR SUBSTRING(tags.tag, 8) = ${peerEmail} 
+      )
       AND transactions.balance_after < transactions.balance_before
   `
 
@@ -62,7 +65,7 @@ export async function getDebtsForUser(email: string): Promise<Debt[]> {
 }
 
 
-export async function getReimbursementsForUser(email: string): Promise<Reimbursement[]> {
+export async function getReimbursementsForUser(email: string, peerEmail: string): Promise<Reimbursement[]> {
   const reimbursements: Reimbursement[] = await db`
     SELECT  
       transactions.id as transaction_id,
@@ -82,7 +85,8 @@ export async function getReimbursementsForUser(email: string): Promise<Reimburse
       INNER JOIN accounts ON accounts.id = transactions.account_id
    WHERE accounts.name ~ ${emailRegex} 
       AND transactions.balance_after > transactions.balance_before
-      AND (users.email = ${email} OR accounts.name = ${email});
+      AND (users.email = ${email} OR accounts.name = ${email})
+      AND (users.email = ${peerEmail} OR accounts.name = ${peerEmail});
   `
 
   return reimbursements
