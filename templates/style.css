@@ -195,8 +195,30 @@ h6 {
   margin-bottom: 20px;
 }
 
+.transaction-card:has(.negative) {
+  border: 2px solid var(--love);
+  border-right: 5px double var(--love);
+}
+
+.transaction-card:has(.positive) {
+  border: 2px solid var(--pine);
+  border-right: 5px double var(--pine);
+}
+
 .transaction-details {
   line-height: 1em;
+}
+
+.balance {
+  border-radius: 20px;
+  background: var(--overlay);
+  padding: 10px 40px;
+  border: 1px solid var(--overlay);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  text-align: center;
+
 }
 
 .transaction-card .transaction-header {

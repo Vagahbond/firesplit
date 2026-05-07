@@ -1,13 +1,12 @@
 div.report-header
-  h2 Détail
-  p.subtitle Historique des transactions avec 
+  h2 Transactions avec 
     b= email
 
-  p.subtitle Montant actuel de la dette: 
-  if currentBalance < 0
-    span.positive= `${email} vous doit ${Math.abs(Number(currentBalance).toFixed(2))}€`
-  else        
-    span.negative= `Vous devez ${Math.abs(Number(currentBalance).toFixed(2))}€ a ${email}`
+  div.balance
+    if currentBalance < 0
+      span.positive= `${email} vous doit ${Math.abs(Number(currentBalance).toFixed(2))}€`
+    else        
+      span.negative= `Vous devez ${Math.abs(Number(currentBalance).toFixed(2))}€ a ${email}`
 
 
   div.section

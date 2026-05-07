@@ -1,23 +1,20 @@
-import { SQL } from "bun";
-import type { Balance, Debt, Reimbursement } from "./entities";
-import type { User } from "../entities";
+import { SQL, sql } from "bun";
+import { SHARED_TAG_PREFIX } from "./repository";
 
-
-const db = new SQL(process.env.DATABASE_URL ?? "postgres://localhost:5432/firefly-iii");
-
-const SHARED_TAG_PREFIX = 'shared:';
-const EMAIL_REGEX = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$";
-
-export async function getUserById(id: number): Promise<User | undefined> {
-
-  const user = await db`SELECT * FROM users WHERE id = ${id}`
-
-  if (!user.length)
-    return undefined;
-
-  return user[0];
-}
-
+export const GROUPED_PAYEES_CTE = sql`
+  WITH grouped_payees AS (                                             
+    SELECT                                                             
+      COUNT(tags.tag) as nb_payees,                                    
+      transaction_journals.id as transaction_journal_id                
+    FROM tags                                                          
+      INNER JOIN tag_transaction_journal ON tag_transaction_journal.   
+    tag_id = tags.id                                                   
+      INNER JOIN transaction_journals ON transaction_journals.id =     
+    tag_transaction_journal.transaction_journal_id                     
+    WHERE tags.tag LIKE '${SHARED_TAG_PREFIX}%'                        
+    GROUP BY transaction_journals.id                                   
+  )                                                                    
+`;
 
 export async function getDebtsForUser(email: string, peerEmail: string): Promise<Debt[]> {
   const debts: Debt[] = await db`
