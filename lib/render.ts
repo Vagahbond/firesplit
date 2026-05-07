@@ -39,12 +39,43 @@ export async function renderBalancesPage(balances: Balance[]): Promise<string> {
   return renderLayout(balancesHtml);
 }
 
-export async function renderReportPage(debts: Debt[], reimbursements: Reimbursement[]): Promise<string> {
+interface ReportEntity {
+  date: Date;
+  amount: number;
+  originalAmount: number;
+  payerEmail: string;
+  description?: string;
+  type: "debt" | "reimbursement";
+}
+
+export async function renderReportPage(email: string, debts: Debt[], reimbursements: Reimbursement[], currentBalance: number): Promise<string> {
   const reportPug = await Bun.file(TEMPLATES_DIR + "/report.pug").text();
 
+  const debtEntities: ReportEntity[] = debts.map(d => ({
+    date: new Date(d.date),
+    amount: d.amount,
+    description: d.description,
+    originalAmount: d.original_amount,
+    payerEmail: d.payer_email,
+    type: "debt",
+  }));
+
+  const reimbursementEntities: ReportEntity[] = reimbursements.map(r => ({
+    date: new Date(r.date),
+    amount: r.amount,
+    originalAmount: r.original_amount,
+    description: r.description,
+    payerEmail: r.payer_email,
+    type: "reimbursement",
+  }));
+
+  const reportItems: ReportEntity[] = [...debtEntities, ...reimbursementEntities].sort((a, b) => b.date.getTime() - a.date.getTime());
+
+
   const reportHtml = pug.compile(reportPug)({
-    debts: debts,
-    reimbursements: reimbursements,
+    email,
+    items: reportItems,
+    currentBalance,
   });
 
 

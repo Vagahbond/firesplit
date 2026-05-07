@@ -3,10 +3,12 @@ each balance in balances
     - const amount = Number(balance.balance)
     - const absAmount = Math.abs(amount).toFixed(2)
     if amount < 0
-      span.balance-amount.negative= `${absAmount}$`
-      span dus par &nbsp;
+      span.balance-amount.positive= `${absAmount}$ `
+      span.situation &nbsp; dus 
+        b.positive par&nbsp;
       a.balance-email(href="/report/" + balance.email)= balance.email
     else
-      span.balance-amount.positive= `${absAmount}$`
-      span dus à &nbsp;
+      span.balance-amount.negative= `${absAmount}$ `
+      span.situation &nbsp; dus 
+        b.negative à&nbsp;
       a.balance-email(href="/report/" + balance.email)= balance.email

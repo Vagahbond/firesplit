@@ -9,15 +9,18 @@ export interface Debt {
   nb_payees: number;
   original_amount: number;
   amount: number;
+  description?: string;
 }
 
 export interface Reimbursement {
+  date: string;
   transaction_id: number;
   transaction_journal_id: number;
   payer_email: string;
   account_name: string;
   original_amount: number;
   amount: number;
+  description?: string;
 }
 
 export interface Balance {

@@ -11,7 +11,11 @@ html(lang="fr")
   body
     div.container
       div.header
-        h1 FireSplit
-        p.subtitle Gestion de dettes simplifiée
+        div.header-title
+          h1 FireSplit
+          p.subtitle Gestion de dettes avec Firefly
+        div.header-logo
+          img(src="/assets/snail.png" alt="snail logo")
+
       div.content-section#content
         != content

@@ -22,6 +22,7 @@ export async function getDebtsForUser(email: string): Promise<Debt[]> {
     SELECT  
       transactions.id as transaction_id,
       transaction_journals.id as transaction_journal_id,
+      transaction_journals.description as description,
       users.email as payer_email,
       accounts.name as source_account,
       tags.tag as tag,
@@ -65,6 +66,8 @@ export async function getReimbursementsForUser(email: string): Promise<Reimburse
   const reimbursements: Reimbursement[] = await db`
     SELECT  
       transactions.id as transaction_id,
+      transaction_journals.description as description,
+      transaction_journals.date as date,
       transaction_journals.id as transaction_journal_id,
       users.email as payer_email,
       accounts.name as account_name,

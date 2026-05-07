@@ -7,6 +7,7 @@ function mkWebResponse(body: string, status: number = 500) {
   return new Response(body, { status: status, headers: { "Content-Type": "text/html" } });
 }
 
+
 Bun.serve({
   port: 3000,
   routes: {
@@ -18,7 +19,15 @@ Bun.serve({
         return mkWebResponse(errorPage, 401);
       }
 
-      const user = await authenticateUser(email).catch(async e => {
+      const token = req.cookies.get(AuthTokenName)
+
+      if (!token) {
+        const errorPage = await renderErrorPage(new FireSplitError("Token not found", 401));
+        return mkWebResponse(errorPage, 401);
+      }
+
+
+      const user = await authenticateUser(token).catch(async e => {
         console.error(e);
 
         const errorPage = await renderErrorPage(e);
@@ -26,6 +35,7 @@ Bun.serve({
         return mkWebResponse(errorPage, e.status);
 
       });
+
 
       if (!user || user instanceof Response) {
         const errorPage = await renderErrorPage(new FireSplitError("User not found", 401));
@@ -37,9 +47,13 @@ Bun.serve({
 
       const reimbursements = await getReimbursementsForUser(user.email)
 
+      const currentBalances = await getBalancesForUser(user.email)
+
+      const currentBalance = Number.parseFloat(currentBalances.find(b => b.email === email)?.balance ?? "0")
 
 
-      const reportPage = await renderReportPage(debts, reimbursements);
+
+      const reportPage = await renderReportPage(email, debts, reimbursements, currentBalance);
       return mkWebResponse(reportPage, 200);
 
     },
@@ -50,11 +64,24 @@ Bun.serve({
       });
     },
 
+    "/assets/:file": req => {
+      const filename = req.params.file;
+      const file = Bun.file(import.meta.dir + `/templates/assets/${filename}`)
+      const mimetype = file.type;
+
+      return new Response(file, {
+        headers: {
+          "Content-Type": mimetype,
+        },
+      });
+    },
+
     "/robots.txt": () => {
       return new Response(Bun.file(import.meta.dir + "/templates/robots.txt"), {
         headers: { "Content-Type": "text/plain" }
       });
     },
+
     "/": async (req) => {
       const token = req.cookies.get(AuthTokenName)
 

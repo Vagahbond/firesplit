@@ -1,52 +1,40 @@
 div.report-header
-  h2 Report
-  p.subtitle Transactions for #{email}
+  h2 Détail
+  p.subtitle Historique des transactions avec 
+    b= email
 
-if debts && debts.length > 0
+  p.subtitle Montant actuel de la dette: 
+  if currentBalance < 0
+    span.positive= `${email} vous doit ${Math.abs(Number(currentBalance).toFixed(2))}€`
+  else        
+    span.negative= `Vous devez ${Math.abs(Number(currentBalance).toFixed(2))}€ a ${email}`
+
+
   div.section
-    h3.section-title Dettes (Owed)
-    each debt in debts
-      div.transaction-card.debt
-        div.transaction-header
-          span.date= debt.date
-          span.amount.negative= Number(debt.amount).toFixed(2) + ' €'
-        div.transaction-details
-          p
-            strong Payer: 
-            span= debt.payer_email
-          p
-            strong Payee: 
-            span= debt.payee_email
-          p
-            strong Source Account: 
-            span= debt.source_account
-          p
-            strong Original Amount: 
-            span= Number(debt.original_amount).toFixed(2) + ' €'
-          if debt.tag
-            p
-              strong Tag: 
-              span= debt.tag
+    if items && items.length > 0
+        h3.section-title Transactions partagées
+        each item in items
+          div.transaction-card.item
+            div.transaction-header
+              span
+                span.desc= item.description
+                span.date= ` - [${item.date.toLocaleDateString()}]`
+              if item.amount > 0
+                span.amount.negative= `+ ${Math.abs(Number(item.amount).toFixed(2))}€`
+              else
+                span.amount.positive= `- ${Math.abs(Number(item.amount).toFixed(2))}€`
+            div.transaction-details
+              p
+                strong Type: 
+                span.type= item.type === 'debt' ? 'Depense' : 'Remboursement'
+              p
+                strong Payeur:  
+                span= item.payerEmail  
+              p
+                strong Montant original: 
+                span= Math.abs(Number(item.originalAmount).toFixed(2)) + ' €'
 
-if reimbursements && reimbursements.length > 0
-  div.section
-    h3.section-title Remboursements (Reimbursed)
-    each reimbursement in reimbursements
-      div.transaction-card.reimbursement
-        div.transaction-header
-          span.date= 'N/A'
-          span.amount.positive= '+' + Number(reimbursement.amount).toFixed(2) + ' €'
-        div.transaction-details
-          p
-            strong Payer: 
-            span= reimbursement.payer_email
-          p
-            strong Account: 
-            span= reimbursement.account_name
-          p
-            strong Original Amount: 
-            span= Number(reimbursement.original_amount).toFixed(2) + ' €'
 
-if (!debts || debts.length === 0) && (!reimbursements || reimbursements.length === 0)
-  div.empty-state
-    p No transactions found for this user.
+    if (!items || items.length === 0)
+      div.empty-state
+        p No transactions found for this user.
