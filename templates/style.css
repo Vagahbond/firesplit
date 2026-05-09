@@ -49,6 +49,7 @@ h6 {
 }
 
 .header {
+  margin-top: 20px;
   border-radius: 20px;
   background: var(--surface);
   padding: 0px 40px;
@@ -65,6 +66,8 @@ h6 {
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  text-decoration: none;
+  color: var(--text);
 }
 
 .header-logo {
@@ -74,6 +77,33 @@ h6 {
   height: 100%;
   filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
 }
+
+.header-currency {
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header-currency span {
+  width: 100%;
+  flex-grow: 100;
+}
+
+.header-currency a {
+  margin: 5px;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 1em;
+  background: var(--overlay);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-currency a:hover {
+  color: var(--subtle);
+}
+
+
 
 .header-logo img {
   height: 100px;
@@ -166,6 +196,19 @@ h6 {
   margin-bottom: 20px;
 }
 
+.report-header {
+  color: var(--subtle)
+}
+
+.report-header h2 {
+  color: var(--text)
+}
+
+.report-header .email {
+  color: var(--text)
+}
+
+
 
 .reports .section {
   padding: 20px;
@@ -207,7 +250,14 @@ h6 {
 
 .transaction-details {
   line-height: 1em;
+  color: var(--subtle);
 }
+
+.transaction-details p span {
+  color: var(--text);
+}
+
+
 
 .balance {
   border-radius: 20px;
@@ -219,6 +269,14 @@ h6 {
   font-size: 1.2em;
   text-align: center;
 
+}
+
+.balance:has(.negative) {
+  border: 2px solid var(--love);
+}
+
+.balance:has(.positive) {
+  border: 2px solid var(--pine);
 }
 
 .transaction-card .transaction-header {
@@ -233,12 +291,14 @@ h6 {
 
 .transaction-header .date {
   font-weight: bold;
+  color: var(--text);
 }
 
 .transaction-header .desc {
   margin-right: auto;
   font-weight: bold;
   text-decoration: underline;
+  color: var(--text);
 }
 
 .transaction-header .amount {

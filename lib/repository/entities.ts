@@ -10,6 +10,9 @@ export interface Debt {
   original_amount: number;
   amount: number;
   description?: string;
+  currency_name: string;
+  currency_symbol: string;
+  currency_code: string;
 }
 
 export interface Reimbursement {
@@ -21,6 +24,9 @@ export interface Reimbursement {
   original_amount: number;
   amount: number;
   description?: string;
+  currency_name: string;
+  currency_symbol: string;
+  currency_code: string;
 }
 
 export interface Balance {
@@ -32,3 +38,14 @@ export interface Balances {
   [key: string]: number;
 }
 
+export interface Currency {
+  currency_id: number;
+  currency_code: string;
+  currency_name: string;
+  currency_symbol: string;
+  to_currency_id: number;
+  to_currency_code: string;
+  to_currency_name: string;
+  to_currency_symbol: string;
+  rate: number
+}

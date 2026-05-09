@@ -4,14 +4,18 @@ div.report-header
 
   div.balance
     if currentBalance < 0
-      span.positive= `${email} vous doit ${Math.abs(Number(currentBalance).toFixed(2))}€`
+      span.email= email
+      span= " vous doit"  
+      b.positive= ` ${Math.abs(Number(currentBalance).toFixed(2))}${currencySymbol}`
     else        
-      span.negative= `Vous devez ${Math.abs(Number(currentBalance).toFixed(2))}€ a ${email}`
+      span= `Vous devez `
+      b.negative= `${Math.abs(Number(currentBalance).toFixed(2))}${currencySymbol}` 
+      span= " a "
+      span.email= ` ${email}`
 
 
   div.section
     if items && items.length > 0
-        h3.section-title Transactions 
         each item in items
           div.transaction-card.item
             div.transaction-header
@@ -19,9 +23,9 @@ div.report-header
                 span.desc= item.description
                 span.date= ` - [${item.date.toLocaleDateString()}]`
               if item.amount > 0
-                span.amount.negative= `+ ${Math.abs(Number(item.amount).toFixed(2))}€`
+                span.amount.negative= `+ ${Math.abs(Number(item.amount).toFixed(2))}${item.currencySymbol}`
               else
-                span.amount.positive= `- ${Math.abs(Number(item.amount).toFixed(2))}€`
+                span.amount.positive= `- ${Math.abs(Number(item.amount).toFixed(2))}${item.currencySymbol}`
             div.transaction-details
               p
                 strong Type: 
@@ -31,7 +35,7 @@ div.report-header
                 span= item.payerEmail  
               p
                 strong Montant original: 
-                span= Math.abs(Number(item.originalAmount).toFixed(2)) + ' €'
+                span= Math.abs(Number(item.originalAmount).toFixed(2)) + item.currencySymbol
 
 
     if (!items || items.length === 0)

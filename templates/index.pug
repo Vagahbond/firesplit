@@ -11,9 +11,13 @@ html(lang="fr")
   body
     div.container
       div.header
-        div.header-title
+        div.header-currency
+          each currency in currencies 
+            a(href=`/set-currency/${currency.to_currency_code}`)= currency.to_currency_symbol
+        a(href="/").header-title
           h1 FireSplit
           p.subtitle Gestion de dettes avec Firefly
+            
         div.header-logo
           img(src="/assets/snail.png" alt="snail logo")
 
