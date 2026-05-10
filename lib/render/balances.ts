@@ -5,16 +5,18 @@ import { renderLayout } from "./layout";
 
 export interface BalancesParams {
   balances: Balance[];
-  currencySymbol: string;
+  currentCurrency: Currency;
   currencies: Currency[];
 }
 
 export async function renderBalancesPage(params: BalancesParams): Promise<string> {
   const balancesPug = await Bun.file(TEMPLATES_DIR + "/balances.pug").text();
 
+  const adjustedBalances = params.balances.map(b => ({ ...b, balance: b.balance * params.currentCurrency.rate }))
+
   const balancesHtml = pug.compile(balancesPug)({
-    balances: params.balances,
-    currencySymbol: params.currencySymbol,
+    balances: adjustedBalances,
+    currentCurrency: params.currentCurrency,
   });
 
   return renderLayout(balancesHtml, params.currencies);

@@ -8,7 +8,7 @@ export interface ReportParams {
   reimbursements: Reimbursement[];
   debts: Debt[];
   currentBalance: number;
-  currencySymbol: string;
+  currentCurrency: Currency;
   currencies: Currency[];
 }
 
@@ -16,6 +16,7 @@ interface ReportEntity {
   date: Date;
   amount: number;
   originalAmount: number;
+  normalizedAmount: number;
   payerEmail: string;
   description?: string;
   type: "debt" | "reimbursement";
@@ -33,6 +34,7 @@ export async function renderReportPage(params: ReportParams): Promise<string> {
     payerEmail: d.payer_email,
     type: "debt",
     currencySymbol: d.currency_symbol,
+    normalizedAmount: d.normalized_amount,
   }));
 
   const reimbursementEntities: ReportEntity[] = params.reimbursements.map(r => ({
@@ -43,15 +45,18 @@ export async function renderReportPage(params: ReportParams): Promise<string> {
     payerEmail: r.payer_email,
     type: "reimbursement",
     currencySymbol: r.currency_symbol,
+    normalizedAmount: r.normalized_amount,
   }));
 
   const reportItems: ReportEntity[] = [...debtEntities, ...reimbursementEntities].sort((a, b) => b.date.getTime() - a.date.getTime());
 
+  const adjustedBalance = params.currentBalance * params.currentCurrency.rate
+
   const reportHtml = pug.compile(reportPug)({
     email: params.email,
     items: reportItems,
-    currentBalance: params.currentBalance,
-    currencySymbol: params.currencySymbol,
+    currentBalance: adjustedBalance,
+    currentCurrency: params.currentCurrency,
   });
 
 

@@ -50,7 +50,6 @@
               pgstop
               pgdump
               pkgs.bun
-              pkgs.simple-http-server
             ];
 
           DATABASE_URI = "pg://firefly-iii:firefly-iii@localhost:5432/firefly-iii";

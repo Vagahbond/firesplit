@@ -6,10 +6,10 @@ div.report-header
     if currentBalance < 0
       span.email= email
       span= " vous doit"  
-      b.positive= ` ${Math.abs(Number(currentBalance).toFixed(2))}${currencySymbol}`
+      b.positive= ` ${Math.abs(Number(currentBalance).toFixed(2))}${currentCurrency.to_currency_symbol}`
     else        
       span= `Vous devez `
-      b.negative= `${Math.abs(Number(currentBalance).toFixed(2))}${currencySymbol}` 
+      b.negative= `${Math.abs(Number(currentBalance).toFixed(2))}${currentCurrency.to_currency_symbol}`
       span= " a "
       span.email= ` ${email}`
 

@@ -1,7 +1,7 @@
 import { SQL } from "bun";
 import type { Balance, Currency, Debt, Reimbursement } from "./entities";
 import type { User } from "../entities";
-import { balancesQuery, currenciesQuery, debtQuery, GROUPED_PAYEES_CTE, reimbursementQuery } from "./queries";
+import { balancesQuery, currenciesQuery, debtQuery, reimbursementQuery } from "./queries";
 
 
 const db = new SQL(process.env.DATABASE_URL ?? "postgres://localhost:5432/firefly-iii");
@@ -17,33 +17,30 @@ export async function getUserById(id: number): Promise<User | undefined> {
   return user[0];
 }
 
-export async function getCurrencies(base_money: string, userId: number): Promise<Currency[]> {
-  const currencies: Currency[] = await db`${currenciesQuery(base_money, userId)}`
+export async function getCurrencies(userId: number): Promise<Currency[]> {
+  const currencies: Currency[] = await db`${currenciesQuery(userId)}`
   return currencies;
 }
 
 
-export async function getDebtsForUser(email: string, peerEmail: string): Promise<Debt[]> {
+export async function getDebtsForUser(user: User, peerEmail: string): Promise<Debt[]> {
   const debts: Debt[] = await db`
-${GROUPED_PAYEES_CTE}
-${debtQuery(email, peerEmail)}`
+${debtQuery(user, peerEmail)}`
   return debts;
 }
 
 
-export async function getReimbursementsForUser(email: string, peerEmail: string): Promise<Reimbursement[]> {
+export async function getReimbursementsForUser(user: User, peerEmail: string): Promise<Reimbursement[]> {
   const reimbursements: Reimbursement[] = await db`
-${GROUPED_PAYEES_CTE}
-${reimbursementQuery(email, peerEmail)}`
+${reimbursementQuery(user, peerEmail)}`
 
   return reimbursements
 }
 
-export async function getBalancesForUser(email: string): Promise<Balance[]> {
+export async function getBalancesForUser(currency: Currency, user: User): Promise<Balance[]> {
 
   const query = db`
-${GROUPED_PAYEES_CTE}
-${balancesQuery(email)}`
+    ${balancesQuery(currency, user)}`
 
   const balances: Balance[] = await query
 

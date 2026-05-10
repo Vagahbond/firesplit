@@ -10,9 +10,10 @@ export interface Debt {
   original_amount: number;
   amount: number;
   description?: string;
-  currency_name: string;
   currency_symbol: string;
   currency_code: string;
+  currency_rate: number;
+  normalized_amount: number;
 }
 
 export interface Reimbursement {
@@ -24,14 +25,15 @@ export interface Reimbursement {
   original_amount: number;
   amount: number;
   description?: string;
-  currency_name: string;
   currency_symbol: string;
   currency_code: string;
+  currency_rate: number;
+  normalized_amount: number;
 }
 
 export interface Balance {
   email: string;
-  balance: string;
+  balance: number;
 }
 
 export interface Balances {
