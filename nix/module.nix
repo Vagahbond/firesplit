@@ -64,32 +64,32 @@ in
         User = config.services.firefly-iii.user;
         Group = config.services.firefly-iii.group;
         StateDirectory = "firefly-iii";
-        ReadWritePaths = [
-          config.services.firefly-iii.dataDir
-        ];
-        BindReadOnlyPaths = [
-          "/var/run/postgresql:/var/run/postgresql:ro"
-        ];
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        # PrivateTmp = true;
-        # PrivateDevices = true;
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        ProtectControlGroups = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectKernelLogs = true;
-        RestrictAddressFamilies = [
-          "AF_UNIX"
-          "AF_INET"
-          "AF_INET6"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        LockPersonality = true;
-        SystemCallArchitectures = "native";
+        # ReadWritePaths = [
+        #   config.services.firefly-iii.dataDir
+        # ];
+        # BindReadOnlyPaths = [
+        #   "/var/run/postgresql:/var/run/postgresql:ro"
+        # ];
+        # MemoryDenyWriteExecute = true;
+        # NoNewPrivileges = true;
+        # # PrivateTmp = true;
+        # # PrivateDevices = true;
+        # ProtectSystem = "strict";
+        # ProtectHome = true;
+        # ProtectControlGroups = true;
+        # ProtectKernelModules = true;
+        # ProtectKernelTunables = true;
+        # ProtectKernelLogs = true;
+        # RestrictAddressFamilies = [
+        #   "AF_UNIX"
+        #   "AF_INET"
+        #   "AF_INET6"
+        # ];
+        # RestrictNamespaces = true;
+        # RestrictRealtime = true;
+        # RestrictSUIDSGID = true;
+        # LockPersonality = true;
+        # SystemCallArchitectures = "native";
       };
       # unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";
       # partOf = [ "phpfpm-firefly-iii.service" ];
