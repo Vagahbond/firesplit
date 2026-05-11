@@ -66,7 +66,9 @@ in
         StateDirectory = "firefly-iii";
         ReadWritePaths = [
           config.services.firefly-iii.dataDir
-          "/var/run/postgresql"
+        ];
+        BindReadOnlyPaths = [
+          "/var/run/postgresql:/var/run/postgresql:ro"
         ];
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
