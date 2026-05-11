@@ -13,7 +13,7 @@ let
   startScript = pkgs.writeShellScriptBin "firesplit.sh" ''
     set -a
     FIREFLY_KEY=$(cat ${config.services.firefly-iii.settings.APP_KEY_FILE})
-    DATABASE_URI=postgres://${config.services.firefly-iii.settings.DB_USERNAME}:@/${config.services.firefly-iii.settings.DB_DATABASE}  
+    DATABASE_URI=postgres://${config.services.firefly-iii.settings.DB_USERNAME}/${config.services.firefly-iii.settings.DB_DATABASE}  
     PORT=${toString cfg.port}
 
 
