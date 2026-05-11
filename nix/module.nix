@@ -34,6 +34,17 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    services.nginx.virtualHosts = lib.mkIf config.services.firefly-iii.enableNginx {
+      ${config.services.firefly-iii.virtualHost} = {
+        locations = {
+          "/debt" = {
+            proxyPass = "http://127.0.0.1:${cfg.port}";
+            proxyWebsockets = true;
+          };
+        };
+      };
+    };
+
     systemd.services.firesplit = {
       description = "Firefly III Debt Tracker";
       wantedBy = [ "multi-user.target" ];
