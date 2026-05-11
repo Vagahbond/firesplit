@@ -39,7 +39,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
-        "firefly-iii-setup"
+        "firefly-iii-setup.service"
       ];
       serviceConfig = {
         Type = "simple";
