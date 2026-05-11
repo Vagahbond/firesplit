@@ -18,7 +18,7 @@ let
     set +a
 
 
-    psql $DATABASE_URI -c "\dt;";
+    ${pkgs.postgresql}/bin/psql $DATABASE_URI -c "SELECT 1"
 
     ${pkgs.bun}/bin/bun ${self.packages.${pkgs.stdenv.system}.default};
   '';
