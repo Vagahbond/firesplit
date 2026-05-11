@@ -65,7 +65,7 @@ in
         Group = config.services.firefly-iii.group;
         StateDirectory = "firefly-iii";
         ReadWritePaths = [ config.services.firefly-iii.dataDir ];
-        PrivateTmp = true;
+        # PrivateTmp = true;
         PrivateDevices = true;
         CapabilityBoundingSet = "";
         AmbientCapabilities = "";
