@@ -56,12 +56,10 @@ in
       after = [
         "network.target"
         "firefly-iii-setup.service"
-        "postgesql.service"
       ];
 
       requires = [
-        "firefly-iii-setup.service"
-        "postgesql.service"
+        "postgresql.service"
       ];
 
       serviceConfig = {
