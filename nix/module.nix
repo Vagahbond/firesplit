@@ -86,8 +86,8 @@ in
         LockPersonality = true;
         SystemCallArchitectures = "native";
       };
-      unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";
-      partOf = [ "phpfpm-firefly-iii.service" ];
+      # unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";
+      # partOf = [ "phpfpm-firefly-iii.service" ];
     };
   };
 }
