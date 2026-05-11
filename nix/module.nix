@@ -67,8 +67,8 @@ in
         ReadWritePaths = [ config.services.firefly-iii.dataDir ];
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
+        # PrivateTmp = true;
+        # PrivateDevices = true;
         ProtectSystem = "strict";
         ProtectHome = true;
         ProtectControlGroups = true;
