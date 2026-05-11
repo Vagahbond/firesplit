@@ -64,7 +64,10 @@ in
         User = config.services.firefly-iii.user;
         Group = config.services.firefly-iii.group;
         StateDirectory = "firefly-iii";
-        ReadWritePaths = [ config.services.firefly-iii.dataDir ];
+        ReadWritePaths = [
+          config.services.firefly-iii.dataDir
+          "/var/run/postgresql"
+        ];
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         # PrivateTmp = true;
