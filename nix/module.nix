@@ -65,11 +65,10 @@ in
         Group = config.services.firefly-iii.group;
         StateDirectory = "firefly-iii";
         ReadWritePaths = [ config.services.firefly-iii.dataDir ];
-        # PrivateTmp = true;
+        PrivateTmp = false;
         PrivateDevices = true;
         CapabilityBoundingSet = "";
         AmbientCapabilities = "";
-        ProtectSystem = "strict";
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
@@ -80,14 +79,12 @@ in
         ProtectProc = "invisible";
         ProcSubset = "pid";
         PrivateNetwork = false;
-        RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX";
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service @resources"
-          "~@obsolete @privileged"
+        RestrictAddressFamilies = [
+          "AF_INET AF_INET6"
+          "AF_UNIX"
         ];
+        SystemCallArchitectures = "native";
         RestrictSUIDSGID = true;
-        RemoveIPC = true;
         NoNewPrivileges = true;
         RestrictRealtime = true;
         RestrictNamespaces = true;
