@@ -38,7 +38,7 @@ in
       ${config.services.firefly-iii.virtualHost} = {
         locations = {
           "/debt" = {
-            proxyPass = "http://127.0.0.1:${cfg.port}";
+            proxyPass = "http://127.0.0.1:${toString cfg.port}";
             proxyWebsockets = true;
           };
         };
