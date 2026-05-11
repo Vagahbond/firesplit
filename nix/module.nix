@@ -4,7 +4,6 @@ self:
   pkgs,
   lib,
   config,
-  stdenv,
   ...
 }:
 let
@@ -18,7 +17,7 @@ let
     PORT=${toString cfg.port};
 
 
-    ${pkgs.bun}/bin/bun ${self.packages.${stdenv.system}.default};
+    ${pkgs.bun}/bin/bun ${self.packages.${pkgs.stdenv.system}.default};
   '';
 
 in
