@@ -12,8 +12,8 @@ let
 
   startScript = pkgs.writeShellScriptBin "firesplit.sh" ''
     set -a
-    FIREFLY_KEY=$(cat ${config.firefly-iii.settings.APP_KEY_FILE});
-    DATABASE_URI=postgres://${config.firefly-iii.settings.DB_USERNAME}@/${config.firefly-iii.settings.DB_DATABASE};
+    FIREFLY_KEY=$(cat ${config.services.firefly-iii.settings.APP_KEY_FILE});
+    DATABASE_URI=postgres://${config.services.firefly-iii.settings.DB_USERNAME}@/${config.services.firefly-iii.settings.DB_DATABASE};
     PORT=${toString cfg.port};
 
 
@@ -46,9 +46,9 @@ in
         Restart = "always";
         RestartSec = "10";
         ExecStart = "${startScript}/bin/firesplit.sh";
-        WorkingDirectory = config.firefly-iii.settings.APP_DIRECTORY;
-        User = config.firefly-iii.user;
-        Group = config.firefly-iii.group;
+        WorkingDirectory = config.services.firefly-iii.settings.APP_DIRECTORY;
+        User = config.services.firefly-iii.user;
+        Group = config.services.firefly-iii.group;
       };
     };
   };
