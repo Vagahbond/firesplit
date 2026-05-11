@@ -7,10 +7,10 @@ import { FireSplitError } from "../errors";
 
 const db = new SQL(process.env.DATABASE_URI ?? "postgres://localhost:5432/firefly-iii");
 
-// await db.connect().catch(e => {
-//   console.error(e);
-//   throw new FireSplitError("Database connection failed", 500);
-// })
+db.connect().catch(e => {
+  console.error(e);
+  throw new FireSplitError(`Database connection failed with ${process.env.DATABASE_URI}`, 500);
+})
 
 
 
