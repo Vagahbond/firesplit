@@ -13,7 +13,7 @@ let
   startScript = pkgs.writeShellScriptBin "firesplit.sh" ''
     set -a
     FIREFLY_KEY=$(cat ${config.services.firefly-iii.settings.APP_KEY_FILE})
-    DATABASE_URI=postgres://${config.services.firefly-iii.settings.DB_USERNAME}/${config.services.firefly-iii.settings.DB_DATABASE}?host=/var/run/postgresql
+    DATABASE_URI=postgres://${config.services.firefly-iii.settings.DB_USERNAME}/${config.services.firefly-iii.settings.DB_DATABASE}?host=/run/postgresql
     PORT=${toString cfg.port}
 
 
@@ -49,46 +49,63 @@ in
     };
 
     systemd.services.firesplit = {
-      description = "Firefly III Debt Tracker";
+      description = "Firesplit, a Firefly III Debt Tracker";
+
       wantedBy = [ "multi-user.target" ];
+
       after = [
         "network.target"
         "firefly-iii-setup.service"
+        "postgesql.service"
       ];
+
+      requires = [
+        "firefly-iii-setup.service"
+        "postgesql.service"
+      ];
+
       serviceConfig = {
         Type = "simple";
-        Restart = "always";
+        Restart = "on-failure";
         RestartSec = "10";
         ExecStart = "${startScript}/bin/firesplit.sh";
+
         WorkingDirectory = self.packages.${pkgs.stdenv.system}.default;
+
         User = config.services.firefly-iii.user;
-        # StateDirectory = "firefly-iii";
-        # ReadWritePaths = [
-        #   config.services.firefly-iii.dataDir
-        # ];
-        # BindReadOnlyPaths = [
-        #   "/var/run/postgresql:/var/run/postgresql:ro"
-        # ];
-        # MemoryDenyWriteExecute = true;
-        # NoNewPrivileges = true;
-        # # PrivateTmp = true;
-        # # PrivateDevices = true;
-        # ProtectSystem = "strict";
-        # ProtectHome = true;
-        # ProtectControlGroups = true;
-        # ProtectKernelModules = true;
-        # ProtectKernelTunables = true;
-        # ProtectKernelLogs = true;
-        # RestrictAddressFamilies = [
-        #   "AF_UNIX"
-        #   "AF_INET"
-        #   "AF_INET6"
-        # ];
-        # RestrictNamespaces = true;
-        # RestrictRealtime = true;
-        # RestrictSUIDSGID = true;
-        # LockPersonality = true;
-        # SystemCallArchitectures = "native";
+        Group = config.services.firefly-iii.group;
+
+        AmbientCapabilities = [ ];
+        CapabilityBoundingSet = [ ];
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = false;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
+        UMask = "077";
+
       };
       # unitConfig.JoinsNamespaceOf = "phpfpm-firefly-iii.service";
       # partOf = [ "phpfpm-firefly-iii.service" ];
