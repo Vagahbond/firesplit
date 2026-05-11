@@ -62,7 +62,6 @@ in
         ExecStart = "${startScript}/bin/firesplit.sh";
         WorkingDirectory = self.packages.${pkgs.stdenv.system}.default;
         User = config.services.firefly-iii.user;
-        Group = config.services.firefly-iii.user;
         # StateDirectory = "firefly-iii";
         # ReadWritePaths = [
         #   config.services.firefly-iii.dataDir
