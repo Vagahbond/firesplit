@@ -1,9 +1,12 @@
 import { authenticateUser, AuthTokenName } from "./lib/authService";
 import { FireSplitError } from "./lib/errors";
 import { renderBalancesPage } from "./lib/render/balances";
+import { TEMPLATES_DIR } from "./lib/render/const";
 import { renderErrorPage } from "./lib/render/error";
 import { renderReportPage } from "./lib/render/reports";
 import { getBalancesForUser, getCurrencies, getDebtsForUser, getReimbursementsForUser } from "./lib/repository/repository";
+
+const port = process.env.PORT ?? 3000;
 
 function mkWebResponse(body: string, status: number = 500) {
   return new Response(body, { status: status, headers: { "Content-Type": "text/html" } });
@@ -11,18 +14,18 @@ function mkWebResponse(body: string, status: number = 500) {
 
 
 Bun.serve({
-  port: 3000,
+  port: port,
   routes: {
 
     "/style.css": () => {
-      return new Response(Bun.file(import.meta.dir + "/templates/style.css"), {
+      return new Response(Bun.file(TEMPLATES_DIR + "/style.css"), {
         headers: { "Content-Type": "text/css" }
       });
     },
 
     "/assets/:file": req => {
       const filename = req.params.file;
-      const file = Bun.file(import.meta.dir + `/templates/assets/${filename}`)
+      const file = Bun.file(TEMPLATES_DIR + `/assets/${filename}`)
       const mimetype = file.type;
 
       return new Response(file, {
@@ -33,7 +36,7 @@ Bun.serve({
     },
 
     "/robots.txt": () => {
-      return new Response(Bun.file(import.meta.dir + "/templates/robots.txt"), {
+      return new Response(Bun.file(TEMPLATES_DIR + "/robots.txt"), {
         headers: { "Content-Type": "text/plain" }
       });
     },
@@ -130,8 +133,6 @@ Bun.serve({
       const cur = req.cookies.get("currency") ?? "ERR";
 
       const ffCurrencies = await getCurrencies(user.id);
-
-      console.log(cur)
 
       const currentCurrency = ffCurrencies.find(c => c.to_currency_code === cur);
 

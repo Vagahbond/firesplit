@@ -1,19 +1,26 @@
 {
   pkgs,
-  buildNpmPackage,
+  stdenv,
+  bun2nix,
+  ...
 }:
-let
-  db = import ./database.nix { inherit pkgs; };
+bun2nix.mkDerivation {
+  pname = "firesplit";
+  version = "0.0.1";
 
-in
-buildNpmPackage {
-  name = "firefly-debt-tracker";
   src = ../.;
-  # Does not matter as Payload is only ran durign build
-  PAYLOAD_SECRET = "YOUR_SECRET_HERE";
-  DATABASE_URI = "pg://firefly-iii:firefly-iii@localhost:5432/firefly-iii";
 
-  packageJSON = ../package.json;
-  packageLock = ../package-lock.json;
-  npmDepsHash = "sha256-VduqM27MAgEQEPpKCByOqTabuowyNLpNiKAYd5CmJBE=";
+  bunDeps = bun2nix.fetchBunDeps {
+    bunNix = ./bun.nix;
+  };
+
+  buildPhase = ''
+    bun run build;
+  '';
+
+  installPhase = ''
+    mkdir -p $out
+
+    cp -R ./dist/* $out/
+  '';
 }

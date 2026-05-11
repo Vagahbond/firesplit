@@ -1,2 +1,2 @@
-export const TEMPLATES_DIR = import.meta.dir + "/../../templates";
+export const TEMPLATES_DIR = import.meta.dir + "/templates";
 

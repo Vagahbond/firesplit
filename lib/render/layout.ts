@@ -6,8 +6,6 @@ export async function renderLayout(content: string, currencies?: Currency[]): Pr
 
   const indexPug = await Bun.file(TEMPLATES_DIR + "/index.pug").text();
 
-  console.log(currencies)
-
   const finalHtml = pug.compile(indexPug)({
     content: content,
     currencies: currencies,

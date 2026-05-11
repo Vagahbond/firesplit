@@ -2,9 +2,16 @@ import { SQL } from "bun";
 import type { Balance, Currency, Debt, Reimbursement } from "./entities";
 import type { User } from "../entities";
 import { balancesQuery, currenciesQuery, debtQuery, reimbursementQuery } from "./queries";
+import { FireSplitError } from "../errors";
 
 
-const db = new SQL(process.env.DATABASE_URL ?? "postgres://localhost:5432/firefly-iii");
+const db = new SQL(process.env.DATABASE_URI ?? "postgres://localhost:5432/firefly-iii");
+
+await db.connect().catch(e => {
+  console.error(e);
+  throw new FireSplitError("Database connection failed", 500);
+})
+
 
 
 export async function getUserById(id: number): Promise<User | undefined> {

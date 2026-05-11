@@ -5,7 +5,14 @@
   "private": true,
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/pug": "^2.0.10"
+    "@types/pug": "^2.0.10",
+    "bun2nix": "^2.1.0"
+  },
+  "scripts": {
+    "prebuild": "bun2nix -o ./nix/bun.nix",
+    "build": "bun build . --target bun --outdir dist --minify && cp -r templates dist/",
+    "dev": "bun run --watch .",
+    "start": "bun run dist"
   },
   "peerDependencies": {
     "typescript": "^5"

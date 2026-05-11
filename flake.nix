@@ -3,10 +3,20 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    bun2nix = {
+      url = "github:nix-community/bun2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.systems.follows = "systems";
+    };
   };
 
   outputs =
-    { nixpkgs, ... }:
+    {
+      nixpkgs,
+      self,
+      ...
+    }:
     let
       forAllSystems =
         function:
@@ -28,7 +38,13 @@
     {
 
       packages = forAllSystems (pkgs: {
-        default = pkgs.callPackage ./nix/package.nix { };
+        default = pkgs.callPackage ./nix/package.nix {
+          bun2nix = self.inputs.bun2nix.packages.${pkgs.stdenv.system}.default;
+        };
+      });
+
+      nixosModules = forAllSystems (_: {
+        default = import ./nix/module.nix self;
       });
 
       devShells = forAllSystems (pkgs: {
@@ -52,9 +68,8 @@
               pkgs.bun
             ];
 
-          DATABASE_URI = "pg://firefly-iii:firefly-iii@localhost:5432/firefly-iii";
-          LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
           ENVIRONMENT = "development";
+          DATABASE_URI = "postgres://localhost:5432/firefly-iii";
 
           shellHook = ''
             echo Now developping my firefly debt plugin!
