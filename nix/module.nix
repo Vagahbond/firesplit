@@ -46,7 +46,7 @@ in
         Restart = "always";
         RestartSec = "10";
         ExecStart = "${startScript}/bin/firesplit.sh";
-        WorkingDirectory = config.services.firefly-iii.settings.APP_DIRECTORY;
+        WorkingDirectory = self.packages.${pkgs.stdenv.system}.default;
         User = config.services.firefly-iii.user;
         Group = config.services.firefly-iii.group;
       };
