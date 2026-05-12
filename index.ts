@@ -1,7 +1,7 @@
 import { authenticateUser, AuthTokenName } from "./lib/authService";
 import { FireSplitError } from "./lib/errors";
 import { renderBalancesPage } from "./lib/render/balances";
-import { TEMPLATES_DIR } from "./lib/render/const";
+import { rootUrl, TEMPLATES_DIR } from "./lib/render/const";
 import { renderErrorPage } from "./lib/render/error";
 import { renderReportPage } from "./lib/render/reports";
 import { getBalancesForUser, getCurrencies, getDebtsForUser, getReimbursementsForUser } from "./lib/repository/repository";
