@@ -14,6 +14,7 @@ let
     set -a
     FIREFLY_KEY=$(cat ${config.services.firefly-iii.settings.APP_KEY_FILE})
     PORT=${toString cfg.port}
+    ROOT_URL=${cfg.rootUrl}
     set +a
 
 
@@ -32,6 +33,12 @@ in
         default = 3000;
         description = "Port to listen on";
       };
+
+      rootUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "${config.services.firefly-iii.virtualHost}/split";
+        description = "The root url to use for the application";
+      };
     };
   };
 
@@ -43,15 +50,6 @@ in
             proxyPass = "http://127.0.0.1:${toString cfg.port}/";
             proxyWebsockets = true;
 
-            extraConfig = ''
-              proxy_set_header X-Forwarded-Prefix /split;
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-
-              proxy_buffering off
-              sub_filter 'href="/' 'href="/split/';
-              sub_filter 'src="/' 'src="/split/';
-            '';
           };
         };
       };
