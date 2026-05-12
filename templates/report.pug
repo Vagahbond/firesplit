@@ -24,6 +24,8 @@ div.report-header
                 span.date= ` - [${item.date.toLocaleDateString()}]`
               if item.amount > 0
                 span.amount.negative= `+ ${Math.abs(Number(item.amount).toFixed(2))}${item.currencySymbol}`
+                  if item.currencySymbol !== currentCurrency.to_currency_symbol 
+                    span.converted-amount= ` (${Math.abs(Number(item.convertedAmount).toFixed(2))}${currentCurrency.to_currency_symbol})`
               else
                 span.amount.positive= `- ${Math.abs(Number(item.amount).toFixed(2))}${item.currencySymbol}`
                   if item.currencySymbol !== currentCurrency.to_currency_symbol 
