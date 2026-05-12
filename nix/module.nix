@@ -36,7 +36,7 @@ in
 
       rootUrl = lib.mkOption {
         type = lib.types.str;
-        default = "${config.services.firefly-iii.virtualHost}/split";
+        default = "https://${config.services.firefly-iii.virtualHost}/split";
         description = "The root url to use for the application";
       };
     };
