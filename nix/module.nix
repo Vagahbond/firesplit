@@ -39,7 +39,7 @@ in
     services.nginx.virtualHosts = lib.mkIf config.services.firefly-iii.enableNginx {
       ${config.services.firefly-iii.virtualHost} = {
         locations = {
-          "/split" = {
+          "/split/" = {
             proxyPass = "http://127.0.0.1:${toString cfg.port}/";
             proxyWebsockets = true;
 
