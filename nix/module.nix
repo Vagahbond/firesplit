@@ -48,6 +48,7 @@ in
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
 
+              proxy_buffering off
               sub_filter 'href="/' 'href="/split/';
               sub_filter 'src="/' 'src="/split/';
             '';
