@@ -54,8 +54,8 @@ in
                 <em class="fa fa-code-fork fa-fw"></em>
                 <span>Firesplit
                 </span>
-            </a>'
-        </li>
+            </a>
+        </li>'
           '';
 
           "/split/" = {
