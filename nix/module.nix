@@ -42,9 +42,11 @@ in
           "/split" = {
             proxyPass = "http://127.0.0.1:${toString cfg.port}/";
             proxyWebsockets = true;
-            # extraConfig = ''
-            #   rewrite ^/split/?(.*)$ /$1 break;
-            # '';
+
+            extraConfig = ''
+              proxy_set_header X-Forwarded-Prefix /split;
+              rewrite ^/split/?(.*)$ /$1 break;
+            '';
           };
         };
       };
