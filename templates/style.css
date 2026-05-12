@@ -87,7 +87,6 @@ h6 {
 
 .header-currency span {
   width: 100%;
-  flex-grow: 100;
 }
 
 .header-currency a {
@@ -319,4 +318,63 @@ h6 {
   font-size: 1.5em;
   margin-top: 20px;
   color: var(--love);
+}
+
+@media (max-width: 600px) {
+  .span {
+    font-size: 1.5em;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+
+  .header {
+    flex-direction: column-reverse;
+    align-items: center;
+    padding: 0px 0px;
+  }
+
+  .header-title>* {
+    margin: 5px 0;
+  }
+
+  .header .header-currency {
+    margin-bottom: 20px;
+  }
+
+  .header .header-currency a {
+    padding: 5px 10px;
+    margin: 0 10px;
+  }
+
+  .header .header-logo {
+    display: none;
+  }
+
+  .balance-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1em;
+  }
+
+  .balance-item .situation {
+    margin: 0;
+  }
+
+
+  .report-header {
+    font-size: .7em;
+  }
+
+  .transaction-card .transaction-header {
+    flex-direction: column;
+
+  }
+
+  .transaction-card .transaction-header span {
+    margin-bottom: 5px;
+  }
+
 }
