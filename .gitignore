@@ -6,6 +6,8 @@ data
 
 .env
 
+result
+
 # output
 out
 dist
