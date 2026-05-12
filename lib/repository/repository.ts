@@ -5,7 +5,15 @@ import { balancesQuery, currenciesQuery, debtQuery, reimbursementQuery } from ".
 import { FireSplitError } from "../errors";
 
 
-const db = new SQL(process.env.DATABASE_URI ?? "postgres://localhost:5432/firefly-iii");
+const databaseUri = process.env.DATABASE_URI
+
+const db = databaseUri ?
+  new SQL(databaseUri) :
+  new SQL(
+    {
+      path: "/run/postgresql"
+    });
+
 
 db.connect().catch(e => {
   console.error(e);
