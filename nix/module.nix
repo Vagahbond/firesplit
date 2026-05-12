@@ -40,11 +40,11 @@ in
       ${config.services.firefly-iii.virtualHost} = {
         locations = {
           "/split" = {
-            proxyPass = "http://127.0.0.1:${toString cfg.port}";
+            proxyPass = "http://127.0.0.1:${toString cfg.port}/";
             proxyWebsockets = true;
-            extraConfig = ''
-              rewrite ^/split/?([^/]*)$ /$1 break;
-            '';
+            # extraConfig = ''
+            #   rewrite ^/split/?(.*)$ /$1 break;
+            # '';
           };
         };
       };
