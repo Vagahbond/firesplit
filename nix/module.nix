@@ -46,6 +46,18 @@ in
     services.nginx.virtualHosts = lib.mkIf config.services.firefly-iii.enableNginx {
       ${config.services.firefly-iii.virtualHost} = {
         locations = {
+          "/" = {
+            extraConfig = ''
+              sub_filter_once on;
+              sub_filter '<ul class="sidebar-menu tree" data-widget="tree">' '<ul class="sidebar-menu tree" data-widget="tree"><li>
+            <a href="https://money.vagahbond.com/split" class="logout-link">
+                <em class="fa fa-code-fork fa-fw"></em>
+                <span>Firesplit
+                </span>
+            </a>'
+        </li>
+          '';
+
           "/split/" = {
             proxyPass = "http://127.0.0.1:${toString cfg.port}/";
             proxyWebsockets = true;

@@ -45,7 +45,9 @@ Bun.serve({
       const token = req.cookies.get(AuthTokenName)
 
       if (!token) {
-        return new Response("No token found", { status: 401 });
+        const errorPage = await renderErrorPage(new FireSplitError("Token not found", 401));
+
+        return mkWebResponse(errorPage, 401);
       }
 
       const user = await authenticateUser(token).catch(async e => {
