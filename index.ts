@@ -95,7 +95,7 @@ Bun.serve({
 
       // Set currency cookie and redirect to / 
 
-      return new Response("OK", { status: 302, headers: { "Location": "/", "Set-Cookie": `currency=${code}; Path=/` } });
+      return new Response("OK", { status: 302, headers: { "Location": rootUrl + "/", "Set-Cookie": `currency=${code}; Path=/` } });
 
     },
 
