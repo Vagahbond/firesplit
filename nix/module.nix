@@ -45,7 +45,8 @@ in
 
             extraConfig = ''
               proxy_set_header X-Forwarded-Prefix /split;
-              rewrite ^/split/?(.*)$ /$1 break;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
             '';
           };
         };
