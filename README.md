@@ -88,8 +88,17 @@ A list of the transactions that you have shared with someone.
 ![screenshot](./doc/assets/firesplit-report.png)
 
 
+# Considerations 
+I do not have the time to dig into it for now, but some calculations are approximate, and debts estimations may vary 1 or 2 dollars after calculation and translation between different currencies. 
+
+Depending on your setup , you might have skewed rates between currencies registered in your Firefly app too. 
+
+Personally, I intend to update it via n8n automation.
+
+I decided to live with the small incorrectness of the calculations.
 
 
+Don't rely on this app if your mates or family members are cheapskates.
 
-
+And thank you Javascript for messing up float calculations.
 

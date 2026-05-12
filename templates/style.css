@@ -306,6 +306,12 @@ h6 {
 }
 
 
+.transaction-header .converted-amount {
+  color: var(--subtle);
+  font-style: italic;
+}
+
+
 
 
 .empty-state {

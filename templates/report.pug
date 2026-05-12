@@ -26,6 +26,9 @@ div.report-header
                 span.amount.negative= `+ ${Math.abs(Number(item.amount).toFixed(2))}${item.currencySymbol}`
               else
                 span.amount.positive= `- ${Math.abs(Number(item.amount).toFixed(2))}${item.currencySymbol}`
+                  if item.currencySymbol !== currentCurrency.to_currency_symbol 
+                    span.converted-amount= ` (${Math.abs(Number(item.convertedAmount).toFixed(2))}${currentCurrency.to_currency_symbol})`
+
             div.transaction-details
               p
                 strong Type: 

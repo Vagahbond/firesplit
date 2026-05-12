@@ -17,6 +17,7 @@ interface ReportEntity {
   amount: number;
   originalAmount: number;
   normalizedAmount: number;
+  convertedAmount: number;
   payerEmail: string;
   description?: string;
   type: "debt" | "reimbursement";
@@ -35,6 +36,7 @@ export async function renderReportPage(params: ReportParams): Promise<string> {
     type: "debt",
     currencySymbol: d.currency_symbol,
     normalizedAmount: d.normalized_amount,
+    convertedAmount: d.normalized_amount * params.currentCurrency.rate,
   }));
 
   const reimbursementEntities: ReportEntity[] = params.reimbursements.map(r => ({
@@ -46,6 +48,7 @@ export async function renderReportPage(params: ReportParams): Promise<string> {
     type: "reimbursement",
     currencySymbol: r.currency_symbol,
     normalizedAmount: r.normalized_amount,
+    convertedAmount: r.normalized_amount * params.currentCurrency.rate,
   }));
 
   const reportItems: ReportEntity[] = [...debtEntities, ...reimbursementEntities].sort((a, b) => b.date.getTime() - a.date.getTime());

@@ -70,6 +70,7 @@
 
           ENVIRONMENT = "development";
           DATABASE_URI = "postgres://localhost:5432/firefly-iii";
+          TEMPLATES_DIR = "/../..";
 
           shellHook = ''
             echo Now developping my firefly debt plugin!
