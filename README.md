@@ -85,7 +85,7 @@ A list of the balances with anyone that has had a shared transaction with you.
 #### Reports 
 
 A list of the transactions that you have shared with someone. 
-![screenshot](./doc/assets/firesplit-reports.png)
+![screenshot](./doc/assets/firesplit-report.png)
 
 
 
