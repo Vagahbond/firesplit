@@ -1,5 +1,5 @@
 import type { Currency } from "../repository/entities";
-import { TEMPLATES_DIR } from "./const";
+import { TEMPLATES_DIR, rootUrl } from "./const";
 import pug from "pug";
 
 export async function renderLayout(content: string, currencies?: Currency[]): Promise<string> {
@@ -9,6 +9,7 @@ export async function renderLayout(content: string, currencies?: Currency[]): Pr
   const finalHtml = pug.compile(indexPug)({
     content: content,
     currencies: currencies,
+    rootUrl: rootUrl,
   });
 
   return finalHtml;

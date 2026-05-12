@@ -1,6 +1,6 @@
 import type { Balance, Currency } from "../repository/entities";
 import pug from "pug";
-import { TEMPLATES_DIR } from "./const";
+import { TEMPLATES_DIR, rootUrl } from "./const";
 import { renderLayout } from "./layout";
 
 export interface BalancesParams {
@@ -17,6 +17,7 @@ export async function renderBalancesPage(params: BalancesParams): Promise<string
   const balancesHtml = pug.compile(balancesPug)({
     balances: adjustedBalances,
     currentCurrency: params.currentCurrency,
+    rootUrl: rootUrl,
   });
 
   return renderLayout(balancesHtml, params.currencies);

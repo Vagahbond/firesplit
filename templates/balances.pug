@@ -6,9 +6,9 @@ each balance in balances
       span.balance-amount.positive= `${absAmount}${currentCurrency.to_currency_symbol}`
       span.situation &nbsp; dus 
         b.positive par&nbsp;
-      a.balance-email(href="/report/" + balance.email)= balance.email
+      a.balance-email(href= rootUrl + "/report/" + balance.email)= balance.email
     else
       span.balance-amount.negative= `${absAmount}${currentCurrency.to_currency_symbol}`
       span.situation &nbsp; dus 
         b.negative à&nbsp;
-      a.balance-email(href="/report/" + balance.email)= balance.email
+      a.balance-email(href= rootUrl + "/report/" + balance.email)= balance.email

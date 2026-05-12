@@ -7,19 +7,19 @@ html(lang="fr")
     title FireSplit - Gestion de dettes
     link(rel="preconnect" href="https://fonts.googleapis.com")
     link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
-    link(rel="stylesheet" href="/style.css")
+    link(rel="stylesheet" href= rootUrl + "/style.css")
   body
     div.container
       div.header
         div.header-currency
           each currency in currencies 
-            a(href=`/set-currency/${currency.to_currency_code}`)= currency.to_currency_symbol
-        a(href="/").header-title
+            a(href= rootUrl + "/set-currency/" + currency.to_currency_code)= currency.to_currency_symbol
+        a(href= rootUrl + "/").header-title
           h1 FireSplit
           p.subtitle Gestion de dettes avec Firefly
             
         div.header-logo
-          img(src="/assets/snail.png" alt="snail logo")
+          img(src= rootUrl + "/assets/snail.png" alt="snail logo")
 
       div.content-section#content
         != content
