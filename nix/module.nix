@@ -66,7 +66,7 @@ in
                 right: 16px;
                 z-index: 99999;
                 padding: 6px 12px;
-                background: #00a65a
+                background: #00a65a;
                 color: white;
                 text-decoration: none;
                 border-radius: 3px;
