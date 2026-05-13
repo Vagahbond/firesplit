@@ -14,7 +14,7 @@ html(lang="fr")
         div.header-currency
           each currency in currencies 
             a(href= rootUrl + "/set-currency/" + currency.to_currency_code)= currency.to_currency_symbol
-        a(href= rootUrl + "/").header-title
+        a(href="/").header-title
           h1 FireSplit
           p.subtitle Gestion de dettes avec Firefly
             
