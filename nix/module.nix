@@ -52,7 +52,11 @@ in
             proxyWebsockets = true;
           };
 
-          "/".extraConfig = lib.mkAfter ''
+          "/".extraConfig = lib.mkAfter '''';
+
+          "~ \\.php$".extraConfig = lib.mkAfter ''
+            fastcgi_param HTTP_ACCEPT_ENCODING "";
+
             sub_filter_types text/html;
             sub_filter_once off;
             sub_filter '</body>' '
@@ -69,11 +73,6 @@ in
                 font-weight: 400;
               ">Firesplit</a>
             </body>';
-
-          '';
-
-          "~ \\.php$".extraConfig = lib.mkAfter ''
-            fastcgi_param HTTP_ACCEPT_ENCODING "";
 
 
           '';
