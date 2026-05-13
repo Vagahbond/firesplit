@@ -45,32 +45,37 @@ in
   config = lib.mkIf cfg.enable {
     services.nginx.virtualHosts = lib.mkIf config.services.firefly-iii.enableNginx {
       ${config.services.firefly-iii.virtualHost} = {
-        extraConfig = ''
-          sub_filter_types text/html;
-          sub_filter_once off;
-          sub_filter '</body>' '
-            <a href="/split/" style="
-              position: fixed;
-              bottom: 16px;
-              right: 16px;
-              z-index: 99999;
-              padding: 8px 16px;
-              background: #1a1f35;
-              color: #e0def4;
-              text-decoration: none;
-              border-radius: 6px;
-              font-weight: 500;
-              box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            ">Split Expenses</a>
-          </body>';
-        '';
+        extraConfig = '''';
         locations = {
           "/split/" = {
             proxyPass = "http://127.0.0.1:${toString cfg.port}/";
             proxyWebsockets = true;
           };
+
+          "/".extraConfig = lib.mkAfter ''
+            sub_filter_types text/html;
+            sub_filter_once off;
+            sub_filter '</body>' '
+              <a href="/split/" style="
+                position: fixed;
+                bottom: 16px;
+                right: 16px;
+                z-index: 99999;
+                padding: 6px 12px;
+                background: #00a65a
+                color: white;
+                text-decoration: none;
+                border-radius: 3px;
+                font-weight: 400;
+              ">Firesplit</a>
+            </body>';
+
+          '';
+
           "~ \\.php$".extraConfig = lib.mkAfter ''
             fastcgi_param HTTP_ACCEPT_ENCODING "";
+
+
           '';
         };
       };
