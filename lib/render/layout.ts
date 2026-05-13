@@ -8,7 +8,7 @@ export async function renderLayout(content: string, currencies?: Currency[]): Pr
 
   const finalHtml = pug.compile(indexPug)({
     content: content,
-    currencies: currencies,
+    currencies: currencies ?? [],
     rootUrl: rootUrl,
   });
 

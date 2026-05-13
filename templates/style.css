@@ -320,6 +320,15 @@ h6 {
   color: var(--love);
 }
 
+
+.error-container {
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 20px;
+  color: var(--love);
+}
+
+
 @media (max-width: 600px) {
   .span {
     font-size: 1.5em;
