@@ -1,36 +1,36 @@
 /* rose-pine colors */
 
 :root {
-  --base: #faf4ed;
-  --surface: #fffaf3;
-  --overlay: #f2e9e1;
-  --muted: #9893a5;
-  --subtle: #797593;
-  --text: #575279;
-  --love: #b4637a;
-  --gold: #ea9d34;
-  --rose: #d7827e;
-  --pine: #286983;
-  --foam: #56949f;
-  --iris: #907aa9;
-  --highlight-low: #f4ede8;
-  --highlight-med: #dfdad9;
-  --highlight-high: #cecacd;
+        --base: #faf4ed;
+        --surface: #fffaf3;
+        --overlay: #f2e9e1;
+        --muted: #9893a5;
+        --subtle: #797593;
+        --text: #575279;
+        --love: #b4637a;
+        --gold: #ea9d34;
+        --rose: #d7827e;
+        --pine: #286983;
+        --foam: #56949f;
+        --iris: #907aa9;
+        --highlight-low: #f4ede8;
+        --highlight-med: #dfdad9;
+        --highlight-high: #cecacd;
 }
 
 /* local Departure Mono font */
 @font-face {
-  font-family: 'Departure Mono';
-  src: url('./assets/DepartureMono-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+        font-family: 'Departure Mono';
+        src: url('./assets/DepartureMono-Regular.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
 }
 
 body {
-  font-family: 'Departure Mono', monospace;
-  background-color: var(--base);
-  color: var(--text);
+        font-family: 'Departure Mono', monospace;
+        background-color: var(--base);
+        color: var(--text);
 }
 
 h1,
@@ -39,351 +39,375 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--rose);
+        color: var(--rose);
 }
 
 
 .container {
-  max-width: 900px;
-  margin: 0 auto;
+        max-width: 900px;
+        margin: 0 auto;
 }
 
 .header {
-  margin-top: 20px;
-  border-radius: 20px;
-  background: var(--surface);
-  padding: 0px 40px;
-  border: 1px solid var(--overlay);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
+        margin-top: 20px;
+        border-radius: 20px;
+        background: var(--surface);
+        padding: 0px 40px;
+        border: 1px solid var(--overlay);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-around;
 }
 
 .header-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-  text-decoration: none;
-  color: var(--text);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        text-decoration: none;
+        color: var(--text);
 }
 
 .header-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.5));
 }
 
 .header-currency {
 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 }
 
 .header-currency span {
-  width: 100%;
+        width: 100%;
 }
 
 .header-currency a {
-  margin: 5px;
-  color: var(--text);
-  border-radius: 10px;
-  padding: 1em;
-  background: var(--overlay);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin: 5px;
+        color: var(--text);
+        border-radius: 10px;
+        padding: 1em;
+        background: var(--overlay);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .header-currency a:hover {
-  color: var(--subtle);
+        color: var(--subtle);
 }
 
 
 
 .header-logo img {
-  height: 100px;
-  animation: snail-animation 5s ease-in-out infinite;
+        height: 100px;
+        animation: snail-animation 5s ease-in-out infinite;
 }
 
 @keyframes snail-animation {
-  0% {
-    transform: translateY(0);
-  }
+        0% {
+                transform: translateY(0);
+        }
 
-  20% {
-    transform: translateY(-10px);
-  }
+        20% {
+                transform: translateY(-10px);
+        }
 
-  40% {
-    transform: translateY(0);
-  }
+        40% {
+                transform: translateY(0);
+        }
 
-  60% {
-    transform: translateY(-10px);
-  }
+        60% {
+                transform: translateY(-10px);
+        }
 
-  80% {
-    transform: translateY(0);
-  }
+        80% {
+                transform: translateY(0);
+        }
 
-  100% {
-    transform: translateY(0);
-  }
+        100% {
+                transform: translateY(0);
+        }
 }
 
 .content-section {
-  margin-top: 20px;
+        margin-top: 20px;
 
 }
 
 /***** balance page *****/
 
 .balance-item {
-  border-radius: 20px;
-  background: var(--surface);
-  padding: 10px 40px;
-  border: 1px solid var(--overlay);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  font-size: 1.5em;
+        border-radius: 20px;
+        background: var(--surface);
+        padding: 10px 40px;
+        border: 1px solid var(--overlay);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        font-size: 1.5em;
 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
 }
 
 .balance-item .situation {
-  margin-left: auto;
+        margin-left: auto;
 }
 
 .balance-item .balance-amount {
-  font-weight: bold;
+        font-weight: bold;
 }
 
 .negative {
-  color: var(--love);
+        color: var(--love);
 }
 
 .positive {
-  color: var(--pine);
+        color: var(--pine);
 }
 
 .balance-item .balance-email {
-  color: var(--text);
+        color: var(--text);
 }
 
 .balance-item .balance-email:hover {
-  color: var(--subtle);
+        color: var(--subtle);
 }
 
 /***** report page *****/
 
 .report-header {
-  border-radius: 20px;
-  background: var(--surface);
-  padding: 0px 40px;
-  border: 1px solid var(--overlay);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  align-items: center;
-  justify-content: space-around;
+        border-radius: 20px;
+        background: var(--surface);
+        padding: 0px 40px;
+        border: 1px solid var(--overlay);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        align-items: center;
+        justify-content: space-around;
 
-  margin-bottom: 20px;
+        margin-bottom: 20px;
 }
 
 .report-header {
-  color: var(--subtle)
+        color: var(--subtle)
 }
 
 .report-header h2 {
-  color: var(--text)
+        color: var(--text)
 }
 
 .report-header .email {
-  color: var(--text)
+        color: var(--text)
 }
 
 
 
 .reports .section {
-  padding: 20px;
-  border-radius: 20px;
-  background: var(--surface);
-  border: 1px solid var(--overlay);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  margin-right: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+        padding: 20px;
+        border-radius: 20px;
+        background: var(--surface);
+        border: 1px solid var(--overlay);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin-right: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
 
 }
 
 .transaction-card {
-  border-radius: 20px;
-  background: var(--overlay);
-  border: none;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: left;
+        border-radius: 20px;
+        background: var(--overlay);
+        border: none;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: left;
 
-  padding: 10px 10px;
+        padding: 10px 10px;
 
-  margin-bottom: 20px;
+        margin-bottom: 20px;
 }
 
 .transaction-card:has(.negative) {
-  border: 2px solid var(--love);
-  border-right: 5px double var(--love);
+        border: 2px solid var(--love);
+        border-right: 5px double var(--love);
 }
 
 .transaction-card:has(.positive) {
-  border: 2px solid var(--pine);
-  border-right: 5px double var(--pine);
+        border: 2px solid var(--pine);
+        border-right: 5px double var(--pine);
 }
 
 .transaction-details {
-  line-height: 1em;
-  color: var(--subtle);
+        line-height: 1em;
+        color: var(--subtle);
 }
 
 .transaction-details p span {
-  color: var(--text);
+        color: var(--text);
 }
 
 
 
 .balance {
-  border-radius: 20px;
-  background: var(--overlay);
-  padding: 10px 40px;
-  border: 1px solid var(--overlay);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  font-size: 1.2em;
-  text-align: center;
+        border-radius: 20px;
+        background: var(--overlay);
+        padding: 10px 40px;
+        border: 1px solid var(--overlay);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        text-align: center;
 
 }
 
 .balance:has(.negative) {
-  border: 2px solid var(--love);
+        border: 2px solid var(--love);
 }
 
 .balance:has(.positive) {
-  border: 2px solid var(--pine);
+        border: 2px solid var(--pine);
 }
 
 .transaction-card .transaction-header {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
 
-  font-size: 1.2em;
+        font-size: 1.2em;
 }
 
 .transaction-header .date {
-  font-weight: bold;
-  color: var(--text);
+        font-weight: bold;
+        color: var(--text);
 }
 
 .transaction-header .desc {
-  margin-right: auto;
-  font-weight: bold;
-  text-decoration: underline;
-  color: var(--text);
+        margin-right: auto;
+        font-weight: bold;
+        text-decoration: underline;
+        color: var(--text);
 }
 
 .transaction-header .amount {
-  font-weight: bold;
+        font-weight: bold;
 }
 
 
 .transaction-header .converted-amount {
-  color: var(--subtle);
-  font-style: italic;
+        color: var(--subtle);
+        font-style: italic;
 }
 
 
 
 
 .empty-state {
-  text-align: center;
-  font-size: 1.5em;
-  margin-top: 20px;
-  color: var(--love);
+        text-align: center;
+        font-size: 1.5em;
+        margin-top: 20px;
+        color: var(--love);
 }
 
 
 .error-container {
-  text-align: center;
-  font-size: 1.5em;
-  margin-top: 20px;
-  color: var(--love);
+        text-align: center;
+        font-size: 1.5em;
+        margin-top: 20px;
+        color: var(--love);
 }
 
 
 @media (max-width: 600px) {
-  .span {
-    font-size: 1.5em;
-  }
+        .span {
+                font-size: 1.5em;
+        }
 
-  .container {
-    max-width: 100%;
-  }
+        .container {
+                max-width: 100%;
+        }
 
-  .header {
-    flex-direction: column-reverse;
-    align-items: center;
-    padding: 0px 0px;
-  }
+        .header {
+                flex-direction: column-reverse;
+                align-items: center;
+                padding: 0px 0px;
+        }
 
-  .header-title>* {
-    margin: 5px 0;
-  }
+        .header-title>* {
+                margin: 5px 0;
+        }
 
-  .header .header-currency {
-    margin-bottom: 20px;
-  }
+        .header .header-currency {
+                margin-bottom: 20px;
+        }
 
-  .header .header-currency a {
-    padding: 5px 10px;
-    margin: 0 10px;
-  }
+        .header .header-currency a {
+                padding: 5px 10px;
+                margin: 0 10px;
+        }
 
-  .header .header-logo {
-    display: none;
-  }
+        .header .header-logo {
+                display: none;
+        }
 
-  .balance-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 1em;
-  }
+        .balance-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 1em;
+        }
 
-  .balance-item .situation {
-    margin: 0;
-  }
+        .balance-item .situation {
+                margin: 0;
+        }
 
 
-  .report-header {
-    font-size: .7em;
-  }
+        .report-header {
+                font-size: .7em;
+        }
 
-  .transaction-card .transaction-header {
-    flex-direction: column;
+        .transaction-card .transaction-header {
+                flex-direction: column;
 
-  }
+        }
 
-  .transaction-card .transaction-header span {
-    margin-bottom: 5px;
-  }
+        .transaction-card .transaction-header span {
+                margin-bottom: 5px;
+        }
 
+}
+
+.recap-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+        background: var(--overlay);
+        padding: 10px 40px;
+        border: 1px solid var(--overlay);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        font-size: 1.2em;
+        text-align: center;
+
+}
+
+.recap-card .recap-global {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
 }

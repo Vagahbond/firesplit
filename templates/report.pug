@@ -43,6 +43,23 @@ div.report-header
                 span= Math.abs(Number(item.originalAmount).toFixed(2)) + item.currencySymbol
 
 
+    div.recap-card
+      div.recap-header
+        h3 Récapitulatif
+      div.recap-global
+        p nb transactions: 
+          span= items.length
+        p à payer: 
+          span= items.filter(item => item.amount > 0).length
+        p à recevoir:    
+          span= items.filter(item => item.amount < 0).length
+      div.recap-global 
+        p montant a payer: 
+          span= items.filter(item => item.amount > 0).reduce((acc, item) => acc + Number.parseFloat(item.convertedAmount), 0).toFixed(2)
+      div.recap-global 
+        p montant a recevoir:                    
+          span= items.filter(item => item.amount < 0).reduce((acc, item) => acc + Number.parseFloat(item.convertedAmount), 0).toFixed(2)       
+
     if (!items || items.length === 0)
       div.empty-state
         p No transactions found for this user.

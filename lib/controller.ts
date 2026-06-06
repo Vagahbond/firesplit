@@ -9,90 +9,90 @@ import { getBalancesForUser, getCurrencies, getDebtsForUser, getReimbursementsFo
 import type { Currency } from "../lib/repository/entities";
 
 export function mkWebResponse(body: string, status: number = 500) {
-  return new Response(body, { status: status, headers: { "Content-Type": "text/html" } });
+        return new Response(body, { status: status, headers: { "Content-Type": "text/html" } });
 }
 
 async function grabUser(req: BunRequest): Promise<User> {
 
-  const token = req.cookies.get(AuthTokenName)
+        const token = req.cookies.get(AuthTokenName)
 
-  if (!token) {
-    throw new FireSplitError("Token not found", 401);
-  }
+        if (!token) {
+                throw new FireSplitError("Token not found", 401);
+        }
 
-  const user = await authenticateUser(token).catch(async e => {
-    throw new FireSplitError("User not found", 401);
-  });
+        const user = await authenticateUser(token).catch(async _ => {
+                throw new FireSplitError("User not found", 401);
+        });
 
-  if (!user || user instanceof Response) {
-    throw new FireSplitError("User not found", 401);
-  }
+        if (!user || user instanceof Response) {
+                throw new FireSplitError("User not found", 401);
+        }
 
-  return user;
+        return user;
 }
 
 
-async function grabCurrency(req: BunRequest, user: User): Promise<[Currency[], Currency]> {
+async function grabCurrency(req: BunRequest): Promise<[Currency[], Currency]> {
 
-  let cur = req.cookies.get("currency");
+        let cur = req.cookies.get("currency");
 
-  const ffCurrencies = await getCurrencies(user.id);
+        const ffCurrencies = await getCurrencies();
 
-  if (!cur && ffCurrencies[0]?.currency_code) {
-    cur = ffCurrencies[0]?.currency_code;
-  }
+        if (!cur && ffCurrencies[0]?.currency_code) {
+                cur = ffCurrencies[0]?.currency_code;
+        }
 
-  if (!cur) {
-    throw new FireSplitError("Currency not found", 401);
-  }
+        if (!cur) {
+                throw new FireSplitError("Currency not found", 401);
+        }
 
-  const currentCurrency = ffCurrencies.find(c => c.to_currency_code.toLowerCase() === cur.toLowerCase());
+        const currentCurrency = ffCurrencies.find(c => c.to_currency_code.toLowerCase() === cur.toLowerCase());
 
-  if (!currentCurrency) {
-    throw new FireSplitError("Currency not found", 401);
-  }
+        if (!currentCurrency) {
+                throw new FireSplitError("Currency not found", 401);
+        }
 
-  return [ffCurrencies, currentCurrency];
+        return [ffCurrencies, currentCurrency];
 }
 
 async function grabEmail(req: BunRequest): Promise<string> {
-  const email = req.params.email
+        const email = req.params.email
 
-  if (!email) {
-    throw new FireSplitError("Email not found", 401);
-  }
+        if (!email) {
+                throw new FireSplitError("Email not found", 401);
+        }
 
-  return email;
+        return email;
 }
 
 export async function homePage(req: BunRequest) {
-  const user = await grabUser(req)
+        const user = await grabUser(req)
 
-  const [currencies, currency] = await grabCurrency(req, user)
+        const [currencies, currency] = await grabCurrency(req)
 
-  const balances = await getBalancesForUser(currency, user)
+        const balances = await getBalancesForUser(user)
 
-  const balancesPage = await renderBalancesPage({ balances, currentCurrency: currency, currencies: currencies });
+        const balancesPage = await renderBalancesPage({ balances, currentCurrency: currency, currencies: currencies });
 
-  return mkWebResponse(balancesPage, 200);
+        return mkWebResponse(balancesPage, 200);
 }
 
 export async function reportPage(req: BunRequest) {
 
-  const user = await grabUser(req)
-  const email = await grabEmail(req)
-  const [currencies, currency] = await grabCurrency(req, user)
+        const user = await grabUser(req)
+        const email = await grabEmail(req)
+        const [currencies, currency] = await grabCurrency(req)
 
-  const debts = await getDebtsForUser(user, email)
+        const debts = await getDebtsForUser(user, email)
 
-  const reimbursements = await getReimbursementsForUser(user, email)
+        const reimbursements = await getReimbursementsForUser(user, email)
 
-  const currentBalances = await getBalancesForUser(currency, user)
+        const currentBalances = await getBalancesForUser(user)
 
-  const currentBalance = currentBalances.find(b => b.email === email)?.balance ?? 0
+        const currentBalance = currentBalances.find(b => b.email === email)?.balance ?? 0
 
 
 
-  const reportPage = await renderReportPage({ email, debts, reimbursements, currentBalance, currentCurrency: currency, currencies });
-  return mkWebResponse(reportPage, 200);
+        const reportPage = await renderReportPage({ email, debts, reimbursements, currentBalance, currentCurrency: currency, currencies });
+        return mkWebResponse(reportPage, 200);
 }

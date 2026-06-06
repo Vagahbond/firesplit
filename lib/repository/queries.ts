@@ -1,6 +1,5 @@
 import { sql } from "bun";
 import type { User } from "../entities";
-import type { Currency } from "./entities";
 
 export const SHARED_TAG_PREFIX = 'shared:';
 export const EMAIL_REGEX = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$";
@@ -22,9 +21,9 @@ export const GROUPED_PAYEES_QUERY = sql`
 
 
 export function debtQuery(user: User, peerEmail?: string,) {
-  let baseQuery = sql`
+        let baseQuery = sql`
   WITH currencies AS (
-  ${currenciesQuery(user.id)}
+  ${currenciesQuery()}
   ), grouped_payees AS (
     ${GROUPED_PAYEES_QUERY}
   )
@@ -32,6 +31,7 @@ SELECT
     transactions.id as transaction_id,
     transaction_journals.id as transaction_journal_id,
     transaction_journals.description as description,
+    transaction_journals.deleted_at as deleted_at,
     users.email as payer_email,
     accounts.name as source_account,
     tags.tag as tag,
@@ -60,24 +60,25 @@ SELECT
     INNER JOIN currencies ON currencies.to_currency_id = transaction_journals.transaction_currency_id
   WHERE tags.tag LIKE ${SHARED_TAG_PREFIX + "%"}::text 
     AND transactions.balance_after < transactions.balance_before
+    AND transaction_journals.deleted_at IS NULL
 `
 
-  if (user.email) {
-    baseQuery = sql`${baseQuery} AND (users.email = ${user.email} OR SUBSTRING(tags.tag, ${SHARED_TAG_PREFIX.length + 1}) = ${user.email})`
-  }
+        if (user.email) {
+                baseQuery = sql`${baseQuery} AND (users.email = ${user.email} OR SUBSTRING(tags.tag, ${SHARED_TAG_PREFIX.length + 1}) = ${user.email})`
+        }
 
-  if (peerEmail) {
-    baseQuery = sql`${baseQuery} AND (users.email = ${peerEmail} OR SUBSTRING(tags.tag, ${SHARED_TAG_PREFIX.length + 1}) = ${peerEmail})`
-  }
+        if (peerEmail) {
+                baseQuery = sql`${baseQuery} AND (users.email = ${peerEmail} OR SUBSTRING(tags.tag, ${SHARED_TAG_PREFIX.length + 1}) = ${peerEmail})`
+        }
 
-  return baseQuery
+        return baseQuery
 }
 
 export function reimbursementQuery(user: User, peerEmail?: string) {
 
-  let baseQuery = sql` 
+        let baseQuery = sql` 
   WITH currencies AS (
-  ${currenciesQuery(user.id)} 
+  ${currenciesQuery()} 
   ), grouped_payees AS (
     ${GROUPED_PAYEES_QUERY}
   )
@@ -86,6 +87,7 @@ export function reimbursementQuery(user: User, peerEmail?: string) {
     transaction_journals.id as transaction_journal_id,
     transaction_journals.description as description,
     transaction_journals.date as date,
+    transaction_journals.deleted_at as deleted_at,
     users.email as payer_email,
     accounts.name as account_name,
     currencies.to_currency_symbol as currency_symbol,
@@ -106,22 +108,23 @@ export function reimbursementQuery(user: User, peerEmail?: string) {
     INNER JOIN accounts ON accounts.id = transactions.account_id
     INNER JOIN currencies ON currencies.to_currency_id = transaction_journals.transaction_currency_id 
  WHERE accounts.name ~ ${EMAIL_REGEX} 
+    AND transaction_journals.deleted_at IS NULL
     AND transactions.balance_after > transactions.balance_before
 `
-  if (user.email) {
-    baseQuery = sql`${baseQuery} AND (users.email = ${user.email} OR accounts.name = ${user.email})`
-  }
+        if (user.email) {
+                baseQuery = sql`${baseQuery} AND (users.email = ${user.email} OR accounts.name = ${user.email})`
+        }
 
-  if (peerEmail) {
-    baseQuery = sql`${baseQuery} AND (users.email = ${peerEmail} OR accounts.name = ${peerEmail})`
-  }
+        if (peerEmail) {
+                baseQuery = sql`${baseQuery} AND (users.email = ${peerEmail} OR accounts.name = ${peerEmail})`
+        }
 
-  return baseQuery
+        return baseQuery
 }
 
 
-export function balancesQuery(currency: Currency, user: User) {
-  return sql`
+export function balancesQuery(user: User) {
+        return sql`
   WITH debts AS (
     ${debtQuery(user)}
 ), reimbursements AS (
@@ -152,8 +155,8 @@ GROUP BY email
 `
 }
 
-export function currenciesQuery(userId: number) {
-  return sql`
+export function currenciesQuery() {
+        return sql`
   SELECT DISTINCT ON (from_currency.id, to_currency.id) 
     from_currency.id as currency_id,
     from_currency.code as currency_code,
@@ -170,7 +173,6 @@ FROM transaction_currencies AS from_currency
   INNER JOIN currency_exchange_rates AS exchange_rates ON from_currency.id = from_currency_id
   INNER JOIN transaction_currencies AS to_currency ON to_currency.id = exchange_rates.to_currency_id
 WHERE from_currency.code ILIKE 'EUR'
-AND exchange_rates.user_id = ${userId}
 AND to_currency.enabled IS TRUE
 ORDER BY from_currency.id, to_currency.id, exchange_rates.date DESC
 `
