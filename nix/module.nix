@@ -45,14 +45,14 @@ in
   config = lib.mkIf cfg.enable {
     services.nginx.virtualHosts = lib.mkIf config.services.firefly-iii.enableNginx {
       ${config.services.firefly-iii.virtualHost} = {
-        extraConfig = '''';
+        extraConfig = "";
         locations = {
           "/split/" = {
             proxyPass = "http://127.0.0.1:${toString cfg.port}/";
             proxyWebsockets = true;
           };
 
-          "/".extraConfig = lib.mkAfter '''';
+          "/".extraConfig = lib.mkAfter "";
 
           "~ \\.php$".extraConfig = lib.mkAfter ''
             fastcgi_param HTTP_ACCEPT_ENCODING "";
@@ -99,6 +99,7 @@ in
         Restart = "on-failure";
         RestartSec = "10";
         ExecStart = "${startScript}/bin/firesplit.sh";
+        Requires = "postgresql.service";
 
         WorkingDirectory = self.packages.${pkgs.stdenv.system}.default;
 
